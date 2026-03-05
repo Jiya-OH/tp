@@ -21,7 +21,16 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/brenda77777.png" width="200px">
 
+[[homepage](http://www.comp.nus.edu.sg/~damithch=)]
 [[github](https://github.com/brenda77777)]
+[[portfolio](team/johndoe.md)]
+
+
+### Gao Huiying
+
+<img src="images/ghyyuan.png" width="200px">
+
+[[github](https://github.com/ghyyuan)]
 
 * Role: Project Advisor
 
