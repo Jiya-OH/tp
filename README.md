@@ -1,5 +1,7 @@
 [![codecov](https://codecov.io/gh/AY2526S2-CS2103T-T13-3/tp/graph/badge.svg?token=YIK5JKXIR6)](https://codecov.io/gh/AY2526S2-CS2103T-T13-3/tp)
-[![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
+[![Java CI](https://github.com/AY2526S2-CS2103T-T13-3/tp/actions/workflows/gradle.yml/badge.svg)](https://github.com/AY2526S2-CS2103T-T13-3/tp/actions/workflows/gradle.yml)
+
+This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 
 ![Ui](docs/images/Ui.png)
 
