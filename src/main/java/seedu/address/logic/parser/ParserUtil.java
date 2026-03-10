@@ -44,8 +44,8 @@ public class ParserUtil {
     public static Role parseName(String name) throws ParseException {
         requireNonNull(name);
         String trimmedName = name.trim();
-        if (!Role.isValidName(trimmedName)) {
-            throw new ParseException(seedu.address.model.application.Role.MESSAGE_CONSTRAINTS);
+        if (!Role.isValidRole(trimmedName)) {
+            throw new ParseException(Role.MESSAGE_CONSTRAINTS);
         }
         return new Role(trimmedName);
     }
@@ -74,7 +74,7 @@ public class ParserUtil {
     public static Company parseAddress(String address) throws ParseException {
         requireNonNull(address);
         String trimmedAddress = address.trim();
-        if (!Company.isValidAddress(trimmedAddress)) {
+        if (!Company.isValidCompanyName(trimmedAddress)) {
             throw new ParseException(Company.MESSAGE_CONSTRAINTS);
         }
         return new Company(trimmedAddress);
@@ -89,7 +89,7 @@ public class ParserUtil {
     public static HrEmail parseEmail(String email) throws ParseException {
         requireNonNull(email);
         String trimmedEmail = email.trim();
-        if (!HrEmail.isValidEmail(trimmedEmail)) {
+        if (!HrEmail.isValidHrEmail(trimmedEmail)) {
             throw new ParseException(HrEmail.MESSAGE_CONSTRAINTS);
         }
         return new HrEmail(trimmedEmail);

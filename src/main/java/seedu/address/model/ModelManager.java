@@ -33,7 +33,7 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredApplications = new FilteredList<>(this.addressBook.getPersonList());
+        filteredApplications = new FilteredList<>(this.addressBook.getApplicationList());
     }
 
     public ModelManager() {
@@ -88,42 +88,41 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasPerson(Application application) {
+    public boolean hasApplication(Application application) {
         requireNonNull(application);
-        return addressBook.hasPerson(application);
+        return addressBook.hasApplication(application);
     }
 
     @Override
-    public void deletePerson(Application target) {
-        addressBook.removePerson(target);
+    public void deleteApplication(Application target) {
+        addressBook.removeApplication(target);
     }
 
     @Override
-    public void addPerson(Application application) {
-        addressBook.addPerson(application);
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    public void addApplication(Application application) {
+        addressBook.addApplication(application);
+        updateFilteredApplicationList(PREDICATE_SHOW_ALL_APPLICATIONS);
     }
 
     @Override
-    public void setPerson(Application target, Application editedApplication) {
+    public void setApplication(Application target, Application editedApplication) {
         requireAllNonNull(target, editedApplication);
-
-        addressBook.setPerson(target, editedApplication);
+        addressBook.setApplication(target, editedApplication);
     }
 
-    //=========== Filtered Person List Accessors =============================================================
+    //=========== Filtered Application List Accessors =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * Returns an unmodifiable view of the list of {@code Application} backed by the internal list of
      * {@code versionedAddressBook}
      */
     @Override
-    public ObservableList<Application> getFilteredPersonList() {
+    public ObservableList<Application> getFilteredApplicationList() {
         return filteredApplications;
     }
 
     @Override
-    public void updateFilteredPersonList(Predicate<Application> predicate) {
+    public void updateFilteredApplicationList(Predicate<Application> predicate) {
         requireNonNull(predicate);
         filteredApplications.setPredicate(predicate);
     }
@@ -144,5 +143,4 @@ public class ModelManager implements Model {
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredApplications.equals(otherModelManager.filteredApplications);
     }
-
 }

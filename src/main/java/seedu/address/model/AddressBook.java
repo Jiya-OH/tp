@@ -73,7 +73,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setApplication(Application target, Application editedApplication) {
         requireNonNull(editedApplication);
-        applications.setPerson(target, editedApplication);
+        applications.setApplication(target, editedApplication);
     }
 
     /**
