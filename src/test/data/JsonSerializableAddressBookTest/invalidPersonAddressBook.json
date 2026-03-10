@@ -1,8 +1,10 @@
 {
-  "applications": [ {
-    "role": "Hans Muster",
-    "phone": "9482424",
-    "hrEmail": "invalid@hrEmail!3e",
-    "company": "4th street"
-  } ]
+  "applications": [
+    {
+      "role": "Hans Muster",
+      "phone": "9482424",
+      "hrEmail": "invalid@hrEmail!3e",
+      "company": "4th street"
+    }
+  ]
 }

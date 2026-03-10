@@ -1,8 +1,10 @@
 {
-  "applications": [ {
-    "role": "Application with invalid role field: Ha!ns Mu@ster",
-    "phone": "9482424",
-    "hrEmail": "hans@example.com",
-    "company": "4th street"
-  } ]
+  "applications": [
+    {
+      "role": "Application with invalid role field: Ha!ns Mu@ster",
+      "phone": "9482424",
+      "hrEmail": "hans@example.com",
+      "company": "4th street"
+    }
+  ]
 }

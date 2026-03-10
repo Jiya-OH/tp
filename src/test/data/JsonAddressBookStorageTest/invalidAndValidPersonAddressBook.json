@@ -1,13 +1,16 @@
 {
-  "applications": [ {
-    "role": "Valid Application",
-    "phone": "9482424",
-    "hrEmail": "hans@example.com",
-    "company": "4th street"
-  }, {
-    "role": "Application With Invalid Phone Field",
-    "phone": "948asdf2424",
-    "hrEmail": "hans@example.com",
-    "company": "4th street"
-  } ]
+  "applications": [
+    {
+      "role": "Valid Application",
+      "phone": "9482424",
+      "hrEmail": "hans@example.com",
+      "company": "4th street"
+    },
+    {
+      "role": "Application With Invalid Phone Field",
+      "phone": "948asdf2424",
+      "hrEmail": "hans@example.com",
+      "company": "4th street"
+    }
+  ]
 }
