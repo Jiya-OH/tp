@@ -1,4 +1,4 @@
-package seedu.company.testutil;
+package seedu.address.testutil;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;

@@ -1,12 +1,12 @@
-package seedu.company.model;
+package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.model.Model.PREDICATE_SHOW_ALL_APPLICATIONS;
-import static seedu.company.testutil.Assert.assertThrows;
-import static seedu.company.testutil.TypicalApplications.ALICE;
-import static seedu.company.testutil.TypicalApplications.BENSON;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_APPLICATIONS;
+import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalApplications.ALICE;
+import static seedu.address.testutil.TypicalApplications.BENSON;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,9 +14,9 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.commons.core.GuiSettings;
-import seedu.company.model.application.RoleContainsKeywordsPredicate;
-import seedu.company.testutil.CompanyBookBuilder;
+import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.application.RoleContainsKeywordsPredicate;
+import seedu.address.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
 
@@ -26,7 +26,7 @@ public class ModelManagerTest {
     public void constructor() {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
-        assertEquals(new CompanyBook(), new CompanyBook(modelManager.getCompanyBook()));
+        assertEquals(new AddressBook(), new AddressBook(modelManager.getAddressBook()));
     }
 
     @Test
@@ -37,14 +37,14 @@ public class ModelManagerTest {
     @Test
     public void setUserPrefs_validUserPrefs_copiesUserPrefs() {
         UserPrefs userPrefs = new UserPrefs();
-        userPrefs.setCompanyBookFilePath(Paths.get("company/book/file/path"));
+        userPrefs.setAddressBookFilePath(Paths.get("company/book/file/path"));
         userPrefs.setGuiSettings(new GuiSettings(1, 2, 3, 4));
         modelManager.setUserPrefs(userPrefs);
         assertEquals(userPrefs, modelManager.getUserPrefs());
 
         // Modifying userPrefs should not modify modelManager's userPrefs
         UserPrefs oldUserPrefs = new UserPrefs(userPrefs);
-        userPrefs.setCompanyBookFilePath(Paths.get("new/company/book/file/path"));
+        userPrefs.setAddressBookFilePath(Paths.get("new/company/book/file/path"));
         assertEquals(oldUserPrefs, modelManager.getUserPrefs());
     }
 
@@ -61,15 +61,15 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setCompanyBookFilePath_nullPath_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> modelManager.setCompanyBookFilePath(null));
+    public void setAddressBookFilePath_nullPath_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.setAddressBookFilePath(null));
     }
 
     @Test
-    public void setCompanyBookFilePath_validPath_setsCompanyBookFilePath() {
+    public void setAddressBookFilePath_validPath_setsAddressBookFilePath() {
         Path path = Paths.get("company/book/file/path");
-        modelManager.setCompanyBookFilePath(path);
-        assertEquals(path, modelManager.getCompanyBookFilePath());
+        modelManager.setAddressBookFilePath(path);
+        assertEquals(path, modelManager.getAddressBookFilePath());
     }
 
     @Test
@@ -78,12 +78,12 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasApplication_applicationNotInCompanyBook_returnsFalse() {
+    public void hasApplication_applicationNotInAddressBook_returnsFalse() {
         assertFalse(modelManager.hasApplication(ALICE));
     }
 
     @Test
-    public void hasApplication_applicationInCompanyBook_returnsTrue() {
+    public void hasApplication_applicationInAddressBook_returnsTrue() {
         modelManager.addApplication(ALICE);
         assertTrue(modelManager.hasApplication(ALICE));
     }
@@ -95,8 +95,8 @@ public class ModelManagerTest {
 
     @Test
     public void equals() {
-        CompanyBook companyBook = new CompanyBookBuilder().withApplication(ALICE).withApplication(BENSON).build();
-        CompanyBook differentCompanyBook = new CompanyBook();
+        AddressBook companyBook = new AddressBookBuilder().withApplication(ALICE).withApplication(BENSON).build();
+        AddressBook differentAddressBook = new AddressBook();
         UserPrefs userPrefs = new UserPrefs();
 
         // same values -> returns true
@@ -114,7 +114,7 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(5));
 
         // different companyBook -> returns false
-        assertFalse(modelManager.equals(new ModelManager(differentCompanyBook, userPrefs)));
+        assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getRole().fullRole.split("\\s+");
@@ -126,7 +126,7 @@ public class ModelManagerTest {
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
-        differentUserPrefs.setCompanyBookFilePath(Paths.get("differentFilePath"));
+        differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(companyBook, differentUserPrefs)));
     }
 }

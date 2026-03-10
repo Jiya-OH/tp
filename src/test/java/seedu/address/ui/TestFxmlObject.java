@@ -1,4 +1,4 @@
-package seedu.company.ui;
+package seedu.address.ui;
 
 import java.util.Objects;
 

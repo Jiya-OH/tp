@@ -1,6 +1,6 @@
-package seedu.company.model.tag;
+package seedu.address.model.tag;
 
-import static seedu.company.testutil.Assert.assertThrows;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 

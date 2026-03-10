@@ -1,11 +1,11 @@
-package seedu.company.logic.commands;
+package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.testutil.Assert.assertThrows;
-import static seedu.company.testutil.TypicalApplications.ALICE;
+import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalApplications.ALICE;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,15 +15,15 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
-import seedu.company.commons.core.GuiSettings;
-import seedu.company.logic.Messages;
-import seedu.company.logic.commands.exceptions.CommandException;
-import seedu.company.model.CompanyBook;
-import seedu.company.model.Model;
-import seedu.company.model.ReadOnlyCompanyBook;
-import seedu.company.model.ReadOnlyUserPrefs;
-import seedu.company.model.application.Application;
-import seedu.company.testutil.ApplicationBuilder;
+import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.AddressBook;
+import seedu.address.model.Model;
+import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.application.Application;
+import seedu.address.testutil.ApplicationBuilder;
 
 public class AddCommandTest {
 
@@ -109,12 +109,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public Path getCompanyBookFilePath() {
+        public Path getAddressBookFilePath() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setCompanyBookFilePath(Path companyBookFilePath) {
+        public void setAddressBookFilePath(Path companyBookFilePath) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -124,12 +124,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public void setCompanyBook(ReadOnlyCompanyBook newData) {
+        public void setAddressBook(ReadOnlyAddressBook newData) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public ReadOnlyCompanyBook getCompanyBook() {
+        public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -196,8 +196,8 @@ public class AddCommandTest {
         }
 
         @Override
-        public ReadOnlyCompanyBook getCompanyBook() {
-            return new CompanyBook();
+        public ReadOnlyAddressBook getAddressBook() {
+            return new AddressBook();
         }
     }
 

@@ -1,46 +1,46 @@
-package seedu.company.storage;
+package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.company.testutil.Assert.assertThrows;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.commons.exceptions.IllegalValueException;
-import seedu.company.commons.util.JsonUtil;
-import seedu.company.model.CompanyBook;
-import seedu.company.testutil.TypicalApplications;
+import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.util.JsonUtil;
+import seedu.address.model.AddressBook;
+import seedu.address.testutil.TypicalApplications;
 
-public class JsonSerializableCompanyBookTest {
+public class JsonSerializableAddressBookTest {
 
-    private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonSerializableCompanyBookTest");
-    private static final Path TYPICAL_APPLICATIONS_FILE = TEST_DATA_FOLDER.resolve("typicalApplicationsCompanyBook.json");
-    private static final Path INVALID_APPLICATION_FILE = TEST_DATA_FOLDER.resolve("invalidApplicationCompanyBook.json");
-    private static final Path DUPLICATE_APPLICATION_FILE = TEST_DATA_FOLDER.resolve("duplicateApplicationCompanyBook.json");
+    private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest");
+    private static final Path TYPICAL_APPLICATIONS_FILE = TEST_DATA_FOLDER.resolve("typicalApplicationsAddressBook.json");
+    private static final Path INVALID_APPLICATION_FILE = TEST_DATA_FOLDER.resolve("invalidApplicationAddressBook.json");
+    private static final Path DUPLICATE_APPLICATION_FILE = TEST_DATA_FOLDER.resolve("duplicateApplicationAddressBook.json");
 
     @Test
     public void toModelType_typicalApplicationsFile_success() throws Exception {
-        JsonSerializableCompanyBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_APPLICATIONS_FILE,
-                JsonSerializableCompanyBook.class).get();
-        CompanyBook companyBookFromFile = dataFromFile.toModelType();
-        CompanyBook typicalApplicationsCompanyBook = TypicalApplications.getTypicalCompanyBook();
-        assertEquals(companyBookFromFile, typicalApplicationsCompanyBook);
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_APPLICATIONS_FILE,
+                JsonSerializableAddressBook.class).get();
+        AddressBook companyBookFromFile = dataFromFile.toModelType();
+        AddressBook typicalApplicationsAddressBook = TypicalApplications.getTypicalAddressBook();
+        assertEquals(companyBookFromFile, typicalApplicationsAddressBook);
     }
 
     @Test
     public void toModelType_invalidApplicationFile_throwsIllegalValueException() throws Exception {
-        JsonSerializableCompanyBook dataFromFile = JsonUtil.readJsonFile(INVALID_APPLICATION_FILE,
-                JsonSerializableCompanyBook.class).get();
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(INVALID_APPLICATION_FILE,
+                JsonSerializableAddressBook.class).get();
         assertThrows(IllegalValueException.class, dataFromFile::toModelType);
     }
 
     @Test
     public void toModelType_duplicateApplications_throwsIllegalValueException() throws Exception {
-        JsonSerializableCompanyBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_APPLICATION_FILE,
-                JsonSerializableCompanyBook.class).get();
-        assertThrows(IllegalValueException.class, JsonSerializableCompanyBook.MESSAGE_DUPLICATE_APPLICATION,
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_APPLICATION_FILE,
+                JsonSerializableAddressBook.class).get();
+        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_APPLICATION,
                 dataFromFile::toModelType);
     }
 

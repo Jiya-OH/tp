@@ -1,22 +1,22 @@
-package seedu.company.testutil;
+package seedu.address.testutil;
 
-import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_HREMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import seedu.company.model.CompanyBook;
-import seedu.company.model.application.Application;
+import seedu.address.model.AddressBook;
+import seedu.address.model.application.Application;
 
 /**
  * A utility class containing a list of {@code Application} objects to be used in tests.
@@ -60,10 +60,10 @@ public class TypicalApplications {
     private TypicalApplications() {} // prevents instantiation
 
     /**
-     * Returns an {@code CompanyBook} with all the typical applications.
+     * Returns an {@code AddressBook} with all the typical applications.
      */
-    public static CompanyBook getTypicalCompanyBook() {
-        CompanyBook ab = new CompanyBook();
+    public static AddressBook getTypicalAddressBook() {
+        AddressBook ab = new AddressBook();
         for (Application application : getTypicalApplications()) {
             ab.addApplication(application);
         }

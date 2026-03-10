@@ -1,39 +1,39 @@
-package seedu.company.logic.commands;
+package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.logic.commands.CommandTestUtil.DESC_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.DESC_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
-import static seedu.company.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.company.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.company.logic.commands.CommandTestUtil.showApplicationAtIndex;
-import static seedu.company.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
-import static seedu.company.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
-import static seedu.company.testutil.TypicalApplications.getTypicalCompanyBook;
+import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showApplicationAtIndex;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
+import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.commons.core.index.Index;
-import seedu.company.logic.Messages;
-import seedu.company.logic.commands.EditCommand.EditApplicationDescriptor;
-import seedu.company.model.CompanyBook;
-import seedu.company.model.Model;
-import seedu.company.model.ModelManager;
-import seedu.company.model.UserPrefs;
-import seedu.company.model.application.Application;
-import seedu.company.testutil.EditApplicationDescriptorBuilder;
-import seedu.company.testutil.ApplicationBuilder;
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
+import seedu.address.logic.commands.EditCommand.EditApplicationDescriptor;
+import seedu.address.model.AddressBook;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
+import seedu.address.model.application.Application;
+import seedu.address.testutil.EditApplicationDescriptorBuilder;
+import seedu.address.testutil.ApplicationBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
  */
 public class EditCommandTest {
 
-    private Model model = new ModelManager(getTypicalCompanyBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -43,7 +43,7 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS, Messages.format(editedApplication));
 
-        Model expectedModel = new ModelManager(new CompanyBook(model.getCompanyBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setApplication(model.getFilteredApplicationList().get(0), editedApplication);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -64,7 +64,7 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS, Messages.format(editedApplication));
 
-        Model expectedModel = new ModelManager(new CompanyBook(model.getCompanyBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setApplication(lastApplication, editedApplication);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -77,7 +77,7 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS, Messages.format(editedApplication));
 
-        Model expectedModel = new ModelManager(new CompanyBook(model.getCompanyBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -93,7 +93,7 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS, Messages.format(editedApplication));
 
-        Model expectedModel = new ModelManager(new CompanyBook(model.getCompanyBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setApplication(model.getFilteredApplicationList().get(0), editedApplication);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -113,7 +113,7 @@ public class EditCommandTest {
         showApplicationAtIndex(model, INDEX_FIRST_APPLICATION);
 
         // edit application in filtered list into a duplicate in company book
-        Application applicationInList = model.getCompanyBook().getApplicationList().get(INDEX_SECOND_APPLICATION.getZeroBased());
+        Application applicationInList = model.getAddressBook().getApplicationList().get(INDEX_SECOND_APPLICATION.getZeroBased());
         EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
                 new EditApplicationDescriptorBuilder(applicationInList).build());
 
@@ -138,7 +138,7 @@ public class EditCommandTest {
         showApplicationAtIndex(model, INDEX_FIRST_APPLICATION);
         Index outOfBoundIndex = INDEX_SECOND_APPLICATION;
         // ensures that outOfBoundIndex is still in bounds of company book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getCompanyBook().getApplicationList().size());
+        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getApplicationList().size());
 
         EditCommand editCommand = new EditCommand(outOfBoundIndex,
                 new EditApplicationDescriptorBuilder().withRole(VALID_ROLE_BOB).build());

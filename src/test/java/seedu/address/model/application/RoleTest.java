@@ -1,8 +1,8 @@
-package seedu.company.model.application;
+package seedu.address.model.application;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.testutil.Assert.assertThrows;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,20 +22,20 @@ public class RoleTest {
     @Test
     public void isValidRole() {
         // null role
-        assertThrows(NullPointerException.class, () -> seedu.company.model.application.Role.isValidRole(null));
+        assertThrows(NullPointerException.class, () -> seedu.address.model.application.Role.isValidRole(null));
 
         // invalid role
-        assertFalse(seedu.company.model.application.Role.isValidRole("")); // empty string
-        assertFalse(seedu.company.model.application.Role.isValidRole(" ")); // spaces only
-        assertFalse(seedu.company.model.application.Role.isValidRole("^")); // only non-alphanumeric characters
-        assertFalse(seedu.company.model.application.Role.isValidRole("peter*")); // contains non-alphanumeric characters
+        assertFalse(seedu.address.model.application.Role.isValidRole("")); // empty string
+        assertFalse(seedu.address.model.application.Role.isValidRole(" ")); // spaces only
+        assertFalse(seedu.address.model.application.Role.isValidRole("^")); // only non-alphanumeric characters
+        assertFalse(seedu.address.model.application.Role.isValidRole("peter*")); // contains non-alphanumeric characters
 
         // valid role
-        assertTrue(seedu.company.model.application.Role.isValidRole("peter jack")); // alphabets only
-        assertTrue(seedu.company.model.application.Role.isValidRole("12345")); // numbers only
-        assertTrue(seedu.company.model.application.Role.isValidRole("peter the 2nd")); // alphanumeric characters
-        assertTrue(seedu.company.model.application.Role.isValidRole("Capital Tan")); // with capital letters
-        assertTrue(seedu.company.model.application.Role.isValidRole("David Roger Jackson Ray Jr 2nd")); // long roles
+        assertTrue(seedu.address.model.application.Role.isValidRole("peter jack")); // alphabets only
+        assertTrue(seedu.address.model.application.Role.isValidRole("12345")); // numbers only
+        assertTrue(seedu.address.model.application.Role.isValidRole("peter the 2nd")); // alphanumeric characters
+        assertTrue(seedu.address.model.application.Role.isValidRole("Capital Tan")); // with capital letters
+        assertTrue(seedu.address.model.application.Role.isValidRole("David Roger Jackson Ray Jr 2nd")); // long roles
     }
 
     @Test

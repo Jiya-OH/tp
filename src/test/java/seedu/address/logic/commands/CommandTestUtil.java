@@ -1,25 +1,25 @@
-package seedu.company.logic.commands;
+package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_COMPANY;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_HREMAIL;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_ROLE;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.company.testutil.Assert.assertThrows;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HREMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import seedu.company.commons.core.index.Index;
-import seedu.company.logic.commands.exceptions.CommandException;
-import seedu.company.model.CompanyBook;
-import seedu.company.model.Model;
-import seedu.company.model.application.RoleContainsKeywordsPredicate;
-import seedu.company.model.application.Application;
-import seedu.company.testutil.EditApplicationDescriptorBuilder;
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.AddressBook;
+import seedu.address.model.Model;
+import seedu.address.model.application.RoleContainsKeywordsPredicate;
+import seedu.address.model.application.Application;
+import seedu.address.testutil.EditApplicationDescriptorBuilder;
 
 /**
  * Contains helper methods for testing commands.
@@ -104,11 +104,11 @@ public class CommandTestUtil {
     public static void assertCommandFailure(Command command, Model actualModel, String expectedMessage) {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
-        CompanyBook expectedCompanyBook = new CompanyBook(actualModel.getCompanyBook());
+        AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
         List<Application> expectedFilteredList = new ArrayList<>(actualModel.getFilteredApplicationList());
 
         assertThrows(CommandException.class, expectedMessage, () -> command.execute(actualModel));
-        assertEquals(expectedCompanyBook, actualModel.getCompanyBook());
+        assertEquals(expectedAddressBook, actualModel.getAddressBook());
         assertEquals(expectedFilteredList, actualModel.getFilteredApplicationList());
     }
     /**

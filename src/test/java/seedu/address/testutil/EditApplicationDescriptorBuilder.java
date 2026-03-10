@@ -1,16 +1,16 @@
-package seedu.company.testutil;
+package seedu.address.testutil;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import seedu.company.logic.commands.EditCommand.EditApplicationDescriptor;
-import seedu.company.model.application.Company;
-import seedu.company.model.application.hrEmail;
-import seedu.company.model.application.Application;
-import seedu.company.model.application.Phone;
-import seedu.company.model.application.Role;
-import seedu.company.model.tag.Tag;
+import seedu.address.logic.commands.EditCommand.EditApplicationDescriptor;
+import seedu.address.model.application.Company;
+import seedu.address.model.application.hrEmail;
+import seedu.address.model.application.Application;
+import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
+import seedu.address.model.tag.Tag;
 
 /**
  * A utility class to help with building EditApplicationDescriptor objects.

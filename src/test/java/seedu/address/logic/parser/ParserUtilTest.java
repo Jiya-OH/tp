@@ -1,10 +1,10 @@
-package seedu.company.logic.parser;
+package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
-import static seedu.company.testutil.Assert.assertThrows;
-import static seedu.company.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
+import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
+import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,12 +13,12 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.logic.parser.exceptions.ParseException;
-import seedu.company.model.application.Company;
-import seedu.company.model.application.hrEmail;
-import seedu.company.model.application.Phone;
-import seedu.company.model.application.Role;
-import seedu.company.model.tag.Tag;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.application.Company;
+import seedu.address.model.application.hrEmail;
+import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
+import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_ROLE = "R@chel";

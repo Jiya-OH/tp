@@ -1,6 +1,6 @@
-package seedu.company.model;
+package seedu.address.model;
 
-import static seedu.company.testutil.Assert.assertThrows;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +13,9 @@ public class UserPrefsTest {
     }
 
     @Test
-    public void setCompanyBookFilePath_nullPath_throwsNullPointerException() {
+    public void setAddressBookFilePath_nullPath_throwsNullPointerException() {
         UserPrefs userPrefs = new UserPrefs();
-        assertThrows(NullPointerException.class, () -> userPrefs.setCompanyBookFilePath(null));
+        assertThrows(NullPointerException.class, () -> userPrefs.setAddressBookFilePath(null));
     }
 
 }

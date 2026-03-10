@@ -1,8 +1,8 @@
-package seedu.company.storage;
+package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static seedu.company.testutil.TypicalApplications.getTypicalCompanyBook;
+import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
 import java.nio.file.Path;
 
@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import seedu.company.commons.core.GuiSettings;
-import seedu.company.model.CompanyBook;
-import seedu.company.model.ReadOnlyCompanyBook;
-import seedu.company.model.UserPrefs;
+import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.AddressBook;
+import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.UserPrefs;
 
 public class StorageManagerTest {
 
@@ -24,7 +24,7 @@ public class StorageManagerTest {
 
     @BeforeEach
     public void setUp() {
-        JsonCompanyBookStorage companyBookStorage = new JsonCompanyBookStorage(getTempFilePath("ab"));
+        JsonAddressBookStorage companyBookStorage = new JsonAddressBookStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
         storageManager = new StorageManager(companyBookStorage, userPrefsStorage);
     }
@@ -51,18 +51,18 @@ public class StorageManagerTest {
     public void companyBookReadSave() throws Exception {
         /*
          * Note: This is an integration test that verifies the StorageManager is properly wired to the
-         * {@link JsonCompanyBookStorage} class.
-         * More extensive testing of UserPref saving/reading is done in {@link JsonCompanyBookStorageTest} class.
+         * {@link JsonAddressBookStorage} class.
+         * More extensive testing of UserPref saving/reading is done in {@link JsonAddressBookStorageTest} class.
          */
-        CompanyBook original = getTypicalCompanyBook();
-        storageManager.saveCompanyBook(original);
-        ReadOnlyCompanyBook retrieved = storageManager.readCompanyBook().get();
-        assertEquals(original, new CompanyBook(retrieved));
+        AddressBook original = getTypicalAddressBook();
+        storageManager.saveAddressBook(original);
+        ReadOnlyAddressBook retrieved = storageManager.readAddressBook().get();
+        assertEquals(original, new AddressBook(retrieved));
     }
 
     @Test
-    public void getCompanyBookFilePath() {
-        assertNotNull(storageManager.getCompanyBookFilePath());
+    public void getAddressBookFilePath() {
+        assertNotNull(storageManager.getAddressBookFilePath());
     }
 
 }

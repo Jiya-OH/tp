@@ -1,17 +1,17 @@
-package seedu.company.testutil;
+package seedu.address.testutil;
 
-import static seedu.company.logic.parser.CliSyntax.PREFIX_COMPANY;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_HREMAIL;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_ROLE;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HREMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Set;
 
-import seedu.company.logic.commands.AddCommand;
-import seedu.company.logic.commands.EditCommand.EditApplicationDescriptor;
-import seedu.company.model.application.Application;
-import seedu.company.model.tag.Tag;
+import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.EditCommand.EditApplicationDescriptor;
+import seedu.address.model.application.Application;
+import seedu.address.model.tag.Tag;
 
 /**
  * A utility class for Application.

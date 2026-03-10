@@ -1,4 +1,4 @@
-package seedu.company.model.application;
+package seedu.address.model.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.testutil.ApplicationBuilder;
+import seedu.address.testutil.ApplicationBuilder;
 
 public class RoleContainsKeywordsPredicateTest {
 

@@ -1,34 +1,34 @@
-package seedu.company.testutil;
+package seedu.address.testutil;
 
-import seedu.company.model.CompanyBook;
-import seedu.company.model.application.Application;
+import seedu.address.model.AddressBook;
+import seedu.address.model.application.Application;
 
 /**
- * A utility class to help with building Companybook objects.
+ * A utility class to help with building Addressbook objects.
  * Example usage: <br>
- *     {@code CompanyBook ab = new CompanyBookBuilder().withApplication("John", "Doe").build();}
+ *     {@code AddressBook ab = new AddressBookBuilder().withApplication("John", "Doe").build();}
  */
-public class CompanyBookBuilder {
+public class AddressBookBuilder {
 
-    private CompanyBook companyBook;
+    private AddressBook companyBook;
 
-    public CompanyBookBuilder() {
-        companyBook = new CompanyBook();
+    public AddressBookBuilder() {
+        companyBook = new AddressBook();
     }
 
-    public CompanyBookBuilder(CompanyBook companyBook) {
+    public AddressBookBuilder(AddressBook companyBook) {
         this.companyBook = companyBook;
     }
 
     /**
-     * Adds a new {@code Application} to the {@code CompanyBook} that we are building.
+     * Adds a new {@code Application} to the {@code AddressBook} that we are building.
      */
-    public CompanyBookBuilder withApplication(Application application) {
+    public AddressBookBuilder withApplication(Application application) {
         companyBook.addApplication(application);
         return this;
     }
 
-    public CompanyBook build() {
+    public AddressBook build() {
         return companyBook;
     }
 }

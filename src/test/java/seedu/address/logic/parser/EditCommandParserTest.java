@@ -1,49 +1,49 @@
-package seedu.company.logic.parser;
+package seedu.address.logic.parser;
 
-import static seedu.company.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.company.logic.commands.CommandTestUtil.COMPANY_DESC_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.COMPANY_DESC_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.HREMAIL_DESC_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.HREMAIL_DESC_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.INVALID_COMPANY_DESC;
-import static seedu.company.logic.commands.CommandTestUtil.INVALID_HREMAIL_DESC;
-import static seedu.company.logic.commands.CommandTestUtil.INVALID_ROLE_DESC;
-import static seedu.company.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
-import static seedu.company.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
-import static seedu.company.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
-import static seedu.company.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_COMPANY;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_HREMAIL;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.company.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.company.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.company.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
-import static seedu.company.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
-import static seedu.company.testutil.TypicalIndexes.INDEX_THIRD_APPLICATION;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.commands.CommandTestUtil.COMPANY_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.COMPANY_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.HREMAIL_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.HREMAIL_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_COMPANY_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_HREMAIL_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_ROLE_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
+import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_HREMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HREMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
+import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_APPLICATION;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.commons.core.index.Index;
-import seedu.company.logic.Messages;
-import seedu.company.logic.commands.EditCommand;
-import seedu.company.logic.commands.EditCommand.EditApplicationDescriptor;
-import seedu.company.model.application.Company;
-import seedu.company.model.application.hrEmail;
-import seedu.company.model.application.Phone;
-import seedu.company.model.application.Role;
-import seedu.company.model.tag.Tag;
-import seedu.company.testutil.EditApplicationDescriptorBuilder;
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
+import seedu.address.logic.commands.EditCommand;
+import seedu.address.logic.commands.EditCommand.EditApplicationDescriptor;
+import seedu.address.model.application.Company;
+import seedu.address.model.application.hrEmail;
+import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
+import seedu.address.model.tag.Tag;
+import seedu.address.testutil.EditApplicationDescriptorBuilder;
 
 public class EditCommandParserTest {
 
@@ -100,7 +100,7 @@ public class EditCommandParserTest {
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser, "1" + INVALID_ROLE_DESC + INVALID_HREMAIL_DESC + VALID_COMPANY_AMY + VALID_PHONE_AMY,
-                seedu.company.model.application.Role.MESSAGE_CONSTRAINTS);
+                seedu.address.model.application.Role.MESSAGE_CONSTRAINTS);
     }
 
     @Test

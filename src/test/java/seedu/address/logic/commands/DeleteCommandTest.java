@@ -1,23 +1,23 @@
-package seedu.company.logic.commands;
+package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.company.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.company.logic.commands.CommandTestUtil.showApplicationAtIndex;
-import static seedu.company.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
-import static seedu.company.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
-import static seedu.company.testutil.TypicalApplications.getTypicalCompanyBook;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showApplicationAtIndex;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
+import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.commons.core.index.Index;
-import seedu.company.logic.Messages;
-import seedu.company.model.Model;
-import seedu.company.model.ModelManager;
-import seedu.company.model.UserPrefs;
-import seedu.company.model.application.Application;
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
+import seedu.address.model.application.Application;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -25,7 +25,7 @@ import seedu.company.model.application.Application;
  */
 public class DeleteCommandTest {
 
-    private Model model = new ModelManager(getTypicalCompanyBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
@@ -35,7 +35,7 @@ public class DeleteCommandTest {
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_APPLICATION_SUCCESS,
                 Messages.format(applicationToDelete));
 
-        ModelManager expectedModel = new ModelManager(model.getCompanyBook(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteApplication(applicationToDelete);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
@@ -59,7 +59,7 @@ public class DeleteCommandTest {
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_APPLICATION_SUCCESS,
                 Messages.format(applicationToDelete));
 
-        Model expectedModel = new ModelManager(model.getCompanyBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteApplication(applicationToDelete);
         showNoApplication(expectedModel);
 
@@ -72,7 +72,7 @@ public class DeleteCommandTest {
 
         Index outOfBoundIndex = INDEX_SECOND_APPLICATION;
         // ensures that outOfBoundIndex is still in bounds of company book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getCompanyBook().getApplicationList().size());
+        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getApplicationList().size());
 
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 

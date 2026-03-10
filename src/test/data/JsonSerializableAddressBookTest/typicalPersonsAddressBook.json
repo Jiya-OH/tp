@@ -1,5 +1,5 @@
 {
-  "_comment": "CompanyBook save file which contains the same Application values as in TypicalApplications#getTypicalCompanyBook()",
+  "_comment": "AddressBook save file which contains the same Application values as in TypicalApplications#getTypicalAddressBook()",
   "applications" : [ {
     "role" : "Alice Pauline",
     "phone" : "94351253",

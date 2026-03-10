@@ -1,4 +1,4 @@
-package seedu.company.commons.core;
+package seedu.address.commons.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

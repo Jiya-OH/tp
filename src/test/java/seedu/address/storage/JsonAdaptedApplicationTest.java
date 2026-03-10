@@ -1,9 +1,9 @@
-package seedu.company.storage;
+package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.company.storage.JsonAdaptedApplication.MISSING_FIELD_MESSAGE_FORMAT;
-import static seedu.company.testutil.Assert.assertThrows;
-import static seedu.company.testutil.TypicalApplications.BENSON;
+import static seedu.address.storage.JsonAdaptedApplication.MISSING_FIELD_MESSAGE_FORMAT;
+import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalApplications.BENSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.commons.exceptions.IllegalValueException;
-import seedu.company.model.application.Company;
-import seedu.company.model.application.hrEmail;
-import seedu.company.model.application.Phone;
-import seedu.company.model.application.Role;
+import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.application.Company;
+import seedu.address.model.application.hrEmail;
+import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
 
 public class JsonAdaptedApplicationTest {
     private static final String INVALID_ROLE = "R@chel";

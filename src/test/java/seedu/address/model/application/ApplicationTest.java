@@ -1,20 +1,20 @@
-package seedu.company.model.application;
+package seedu.address.model.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
-import static seedu.company.testutil.Assert.assertThrows;
-import static seedu.company.testutil.TypicalApplications.ALICE;
-import static seedu.company.testutil.TypicalApplications.BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalApplications.ALICE;
+import static seedu.address.testutil.TypicalApplications.BOB;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.company.testutil.ApplicationBuilder;
+import seedu.address.testutil.ApplicationBuilder;
 
 public class ApplicationTest {
 

@@ -1,15 +1,15 @@
-package seedu.company.testutil;
+package seedu.address.testutil;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import seedu.company.model.application.Application;
-import seedu.company.model.application.Company;
-import seedu.company.model.application.hrEmail;
-import seedu.company.model.application.Phone;
-import seedu.company.model.application.Role;
-import seedu.company.model.tag.Tag;
-import seedu.company.model.util.SampleDataUtil;
+import seedu.address.model.application.Application;
+import seedu.address.model.application.Company;
+import seedu.address.model.application.hrEmail;
+import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
+import seedu.address.model.tag.Tag;
+import seedu.address.model.util.SampleDataUtil;
 
 /**
  * A utility class to help with building Application objects.
