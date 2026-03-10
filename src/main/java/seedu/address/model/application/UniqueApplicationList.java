@@ -8,9 +8,8 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.model.application.exceptions.DuplicateApplicationException;
 import seedu.address.model.application.exceptions.ApplicationNotFoundException;
-
+import seedu.address.model.application.exceptions.DuplicateApplicationException;
 /**
  * A list of applications that enforces uniqueness between its elements and does not allow nulls.
  * An application is considered unique by comparing using {@code Application#isSameApplication(Application)}. As such, adding and updating of
