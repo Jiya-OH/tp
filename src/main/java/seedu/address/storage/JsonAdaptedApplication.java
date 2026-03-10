@@ -97,7 +97,6 @@ class JsonAdaptedApplication {
         if (company == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Company.class.getSimpleName()));
         }
-        // 🔴 假设你的 Company 类依然叫 isValidAddress，如果改成了 isValidCompany，请相应修改
         if (!Company.isValidCompanyName(company)) {
             throw new IllegalValueException(Company.MESSAGE_CONSTRAINTS);
         }
