@@ -62,8 +62,8 @@ public class Application {
     }
 
     /**
-     * Returns true if both persons have the same role and company.
-     * This defines a weaker notion of equality between two persons/applications.
+     * Returns true if both applications have the same role.
+     * This defines a weaker notion of equality between two applications, used for identity.
      */
     public boolean isSameApplication(Application otherApplication) {
         if (otherApplication == this) {

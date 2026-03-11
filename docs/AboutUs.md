@@ -53,6 +53,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](https://github.com/brenda77777)]
 
-* Role: Tech Lead 
+* Role: Tech Lead
 * Responsibilities: Design and implement backend features. Review pull requests and maintain code quality.
 Coordinate integration of team features.
