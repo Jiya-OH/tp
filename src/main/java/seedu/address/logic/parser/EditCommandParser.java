@@ -72,8 +72,8 @@ public class EditCommandParser implements Parser<EditCommand> {
                 Status status = Status.valueOf(argMultimap.getValue(PREFIX_STATUS).get().toUpperCase());
                 editApplicationDescriptor.setStatus(status);
             } catch (IllegalArgumentException e) {
-                throw new ParseException("Invalid status. Valid values: APPLIED," +
-                        " INTERVIEWING, OFFERED, REJECTED, WITHDRAWN");
+                throw new ParseException("Invalid status. Valid values: APPLIED,"
+                        + " INTERVIEWING, OFFERED, REJECTED, WITHDRAWN");
             }
         }
 
