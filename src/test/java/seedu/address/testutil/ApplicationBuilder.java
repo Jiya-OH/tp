@@ -93,6 +93,9 @@ public class ApplicationBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Status} of the {@code Application} that we are building.
+     */
     public ApplicationBuilder withStatus(Status status) {
         this.status = status;
         return this;
