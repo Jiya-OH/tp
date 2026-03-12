@@ -29,15 +29,15 @@ public class ApplicationCard extends UiPart<Region> {
     @FXML
     private HBox cardPane;
     @FXML
-    private Label name;
+    private Label role;
     @FXML
     private Label id;
     @FXML
     private Label phone;
     @FXML
-    private Label address;
+    private Label company;
     @FXML
-    private Label email;
+    private Label hrEmail;
     @FXML
     private FlowPane tags;
 
@@ -48,10 +48,10 @@ public class ApplicationCard extends UiPart<Region> {
         super(FXML);
         this.application = application;
         id.setText(displayedIndex + ". ");
-        name.setText(application.getRole().roleName);
+        role.setText(application.getRole().roleName);
         phone.setText(application.getPhone().value);
-        address.setText(application.getCompany().companyName);
-        email.setText(application.getHrEmail().value);
+        company.setText(application.getCompany().companyName);
+        hrEmail.setText(application.getHrEmail().value);
         application.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));

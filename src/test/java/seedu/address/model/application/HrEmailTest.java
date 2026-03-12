@@ -60,7 +60,8 @@ public class HrEmailTest {
         assertTrue(HrEmail.isValidHrEmail("a@bc")); // minimal
         assertTrue(HrEmail.isValidHrEmail("test@localhost")); // alphabets only
         assertTrue(HrEmail.isValidHrEmail("123@145")); // numeric local part and domain role
-        assertTrue(HrEmail.isValidHrEmail("a1+be.d@example1.com")); // mixture of alphanumeric and special characters
+        // mixture of alphanumeric and special characters
+        assertTrue(HrEmail.isValidHrEmail("a1+be.d@example1.com"));
         assertTrue(HrEmail.isValidHrEmail("peter_jack@very-very-very-long-example.com")); // long domain role
         assertTrue(HrEmail.isValidHrEmail("if.you.dream.it_you.can.do.it@example.com")); // long local part
         assertTrue(HrEmail.isValidHrEmail("e1234567@u.nus.edu")); // more than one period in domain
@@ -68,21 +69,21 @@ public class HrEmailTest {
 
     @Test
     public void equals() {
-        HrEmail HrEmail = new HrEmail("valid@HrEmail");
+        HrEmail hrEmail = new HrEmail("valid@HrEmail");
 
         // same values -> returns true
-        assertTrue(HrEmail.equals(new HrEmail("valid@HrEmail")));
+        assertTrue(hrEmail.equals(new HrEmail("valid@HrEmail")));
 
         // same object -> returns true
-        assertTrue(HrEmail.equals(HrEmail));
+        assertTrue(hrEmail.equals(hrEmail));
 
         // null -> returns false
-        assertFalse(HrEmail.equals(null));
+        assertFalse(hrEmail.equals(null));
 
         // different types -> returns false
-        assertFalse(HrEmail.equals(5.0f));
+        assertFalse(hrEmail.equals(5.0f));
 
         // different values -> returns false
-        assertFalse(HrEmail.equals(new HrEmail("other.valid@HrEmail")));
+        assertFalse(hrEmail.equals(new HrEmail("other.valid@HrEmail")));
     }
 }

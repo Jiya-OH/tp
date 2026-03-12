@@ -32,9 +32,12 @@ public class ApplicationTest {
         // null -> returns false
         assertFalse(ALICE.isSameApplication(null));
 
-        // same role, all other attributes different -> returns true
-        Application editedAlice = new ApplicationBuilder(ALICE).withPhone(VALID_PHONE_BOB).withHrEmail(VALID_HREMAIL_BOB)
-                .withCompany(VALID_COMPANY_BOB).withTags(VALID_TAG_HUSBAND).build();
+        // same role and company, all other attributes different -> returns true
+        Application editedAlice = new ApplicationBuilder(ALICE)
+                .withPhone(VALID_PHONE_BOB)
+                .withHrEmail(VALID_HREMAIL_BOB)
+                .withTags(VALID_TAG_HUSBAND)
+                .build();
         assertTrue(ALICE.isSameApplication(editedAlice));
 
         // different role, all other attributes same -> returns false
