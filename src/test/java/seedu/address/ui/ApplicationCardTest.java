@@ -34,7 +34,8 @@ public class ApplicationCardTest {
     @Test
     public void constructor_setsDisplayedFieldsCorrectly() throws Exception {
         Application application = new ApplicationBuilder()
-                .withCompany("Google")
+                .withCompanyName("Google")
+                .withCompanyLocation("")
                 .withRole("Intern")
                 .withPhone("91234567")
                 .withHrEmail("hr@google.com")
@@ -50,6 +51,22 @@ public class ApplicationCardTest {
         assertEquals("hr@google.com", getLabelText(applicationCard, "hrEmail"));
         assertEquals("Status: APPLIED", getLabelText(applicationCard, "status"));
         // companyLocation is hidden when empty; its text is not guaranteed.
+    }
+
+    @Test
+    public void constructor_withCompanyLocation_setsLocationVisibleAndText() throws Exception {
+        Application application = new ApplicationBuilder()
+                .withCompanyName("Google")
+                .withCompanyLocation("Singapore")
+                .withRole("Intern")
+                .withPhone("91234567")
+                .withHrEmail("hr@google.com")
+                .build();
+
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+
+        assertEquals("Google", getLabelText(applicationCard, "companyName"));
+        assertEquals("Singapore", getLabelText(applicationCard, "companyLocation"));
     }
 
     private String getLabelText(ApplicationCard card, String fieldName) throws Exception {

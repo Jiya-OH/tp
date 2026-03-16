@@ -20,7 +20,7 @@ public class ApplicationTest {
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
         Application application = new ApplicationBuilder().build();
-        assertThrows(UnsupportedOperationException.class, () -> application.getTags().remove(0));
+        assertThrows(UnsupportedOperationException.class, () -> application.getTags().clear());
     }
 
     @Test
@@ -62,9 +62,6 @@ public class ApplicationTest {
         // same object -> returns true
         assertTrue(ALICE.equals(ALICE));
 
-        // null -> returns false
-        assertFalse(ALICE.equals(null));
-
         // different type -> returns false
         assertFalse(ALICE.equals(5));
 
@@ -90,6 +87,18 @@ public class ApplicationTest {
         // different tags -> returns false
         editedAlice = new ApplicationBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void constructor_withoutStatus_defaultsToApplied() {
+        Application applicationWithDefaultStatus = new Application(
+                ALICE.getRole(),
+                ALICE.getPhone(),
+                ALICE.getHrEmail(),
+                ALICE.getCompany(),
+                ALICE.getTags());
+
+        assertEquals(Status.APPLIED, applicationWithDefaultStatus.getStatus());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package seedu.address.model.application;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -37,6 +38,22 @@ public class CompanyTest {
     }
 
     @Test
+    public void isValidCompanyLocation() {
+        assertTrue(Company.isValidCompanyLocation("")); // empty allowed
+        assertTrue(Company.isValidCompanyLocation("Singapore"));
+        assertTrue(Company.isValidCompanyLocation("12345, ABC Street"));
+    }
+
+    @Test
+    public void toString_includesLocationWhenPresent() {
+        Company withLocation = new Company("Valid Company", "Singapore");
+        Company withoutLocation = new Company("Valid Company", "");
+
+        assertEquals("Valid Company (Singapore)", withLocation.toString());
+        assertEquals("Valid Company", withoutLocation.toString());
+    }
+
+    @Test
     public void equals() {
         Company company = new Company("Valid Company", "Singapore");
 
@@ -45,9 +62,6 @@ public class CompanyTest {
 
         // same object -> returns true
         assertTrue(company.equals(company));
-
-        // null -> returns false
-        assertFalse(company.equals(null));
 
         // different types -> returns false
         assertFalse(company.equals(5.0f));

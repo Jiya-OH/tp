@@ -117,6 +117,25 @@ public class JsonAdaptedApplicationTest {
     }
 
     @Test
+    public void toModelType_nullStatus_defaultsToApplied() throws Exception {
+        JsonAdaptedApplication application =
+                new JsonAdaptedApplication(VALID_ROLE, VALID_PHONE, VALID_HREMAIL, VALID_COMPANY_NAME,
+                        VALID_COMPANY_LOCATION, VALID_TAGS, null);
+        seedu.address.model.application.Application modelApplication = application.toModelType();
+        assertEquals(seedu.address.model.application.Status.APPLIED, modelApplication.getStatus());
+    }
+
+    @Test
+    public void toModelType_invalidStatus_throwsIllegalValueException() {
+        String invalidStatus = "NOT_A_STATUS";
+        JsonAdaptedApplication application =
+                new JsonAdaptedApplication(VALID_ROLE, VALID_PHONE, VALID_HREMAIL, VALID_COMPANY_NAME,
+                        VALID_COMPANY_LOCATION, VALID_TAGS, invalidStatus);
+        String expectedMessage = "Invalid status: " + invalidStatus;
+        assertThrows(IllegalValueException.class, expectedMessage, application::toModelType);
+    }
+
+    @Test
     public void toModelType_invalidTags_throwsIllegalValueException() {
         List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
         invalidTags.add(new JsonAdaptedTag(INVALID_TAG));
