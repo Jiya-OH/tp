@@ -114,6 +114,11 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseCompanyLocation_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseCompanyLocation((String) null));
+    }
+
+    @Test
     public void parseCompany_validValueWithoutWhitespace_returnsCompany() throws Exception {
         Company expectedCompany = new Company(VALID_COMPANY_NAME, VALID_COMPANY_LOCATION);
         String name = ParserUtil.parseCompanyName(VALID_COMPANY_NAME);

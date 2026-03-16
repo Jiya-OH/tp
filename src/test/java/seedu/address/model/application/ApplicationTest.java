@@ -112,4 +112,10 @@ public class ApplicationTest {
                 + ", status=" + ALICE.getStatus() + "}";
         assertEquals(expected, ALICE.toString());
     }
+
+    @Test
+    public void hashCode_sameValues_sameHash() {
+        Application copyOfAlice = new ApplicationBuilder(ALICE).build();
+        assertEquals(ALICE.hashCode(), copyOfAlice.hashCode());
+    }
 }

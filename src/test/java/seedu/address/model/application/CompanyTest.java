@@ -70,4 +70,12 @@ public class CompanyTest {
         assertFalse(company.equals(new Company("Other Valid Company", "Singapore")));
         assertFalse(company.equals(new Company("Valid Company", "Other Location")));
     }
+
+    @Test
+    public void hashCode_sameValues_sameHash() {
+        Company company1 = new Company("Valid Company", "Singapore");
+        Company company2 = new Company("Valid Company", "Singapore");
+
+        assertEquals(company1.hashCode(), company2.hashCode());
+    }
 }
