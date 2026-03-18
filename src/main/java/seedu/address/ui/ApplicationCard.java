@@ -12,7 +12,8 @@ import seedu.address.model.application.Application;
 /**
  * An UI component that displays information of a {@code Application}.
  */
-public class ApplicationCard extends UiPart<Region> {
+public class
+ApplicationCard extends UiPart<Region> {
 
     private static final String FXML = "ApplicationListCard.fxml";
 
@@ -64,10 +65,15 @@ public class ApplicationCard extends UiPart<Region> {
             companyLocation.setText(loc);
         }
 
-        status.setText("Status: " + application.getStatus().toString());
+        status.setVisible(false);
+        status.setManaged(false);
 
         application.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+
+        String statusText = application.getStatus().toString().toLowerCase();
+        Label statusTag = new Label(statusText);
+        tags.getChildren().add(statusTag);
     }
 }
