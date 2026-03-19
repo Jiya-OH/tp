@@ -79,7 +79,7 @@ public class MainWindowTest {
 
         @Override
         public Path getAddressBookFilePath() {
-            return Path.of("data", "addressbook.json");
+            return Path.of("data", "applicationList.json");
         }
 
         @Override

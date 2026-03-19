@@ -160,7 +160,7 @@ Hired! data are saved automatically to the hard disk after any command that chan
 
 ### Editing the data file
 
-Hired! data are saved automatically as a JSON file at `[JAR file location]/data/addressbook.json`. Advanced users may update data directly by editing that file.
+Hired! data are saved automatically as a JSON file at `[JAR file location]/data/applicationList.json`. Advanced users may update data directly by editing that file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file make its format invalid, Hired! may discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
