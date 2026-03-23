@@ -22,7 +22,7 @@ import seedu.address.model.application.Application;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final AddressBook addressBook;
+    private final VersionedAddressBook versionedAddressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Application> filteredApplications;
 
@@ -34,15 +34,31 @@ public class ModelManager implements Model {
 
         logger.fine("Initializing with Hired!: " + addressBook + " and user prefs " + userPrefs);
 
-        this.addressBook = new AddressBook(addressBook);
+        this.versionedAddressBook = new VersionedAddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredApplications = new FilteredList<>(this.addressBook.getApplicationList());
+        filteredApplications = new FilteredList<>(this.versionedAddressBook.getApplicationList());
     }
 
-    public ModelManager() {
-        this(new AddressBook(), new UserPrefs());
+    //    public ModelManager() {
+    //        this(new VersionedAddressBook(), new UserPrefs());
+    //    }
+
+    //=========== Undo ==================================================================================
+
+    @Override
+    public boolean canUndoAddressBook() {
+        return versionedAddressBook.canUndo();
     }
 
+    @Override
+    public void undoAddressBook() {
+        versionedAddressBook.undo();
+    }
+
+    @Override
+    public void commitAddressBook() {
+        versionedAddressBook.commit();
+    }
     //=========== UserPrefs ==================================================================================
 
     @Override
@@ -82,35 +98,35 @@ public class ModelManager implements Model {
 
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
-        this.addressBook.resetData(addressBook);
+        this.versionedAddressBook.resetData(addressBook);
     }
 
     @Override
     public ReadOnlyAddressBook getAddressBook() {
-        return addressBook;
+        return versionedAddressBook;
     }
 
     @Override
     public boolean hasApplication(Application application) {
         requireNonNull(application);
-        return addressBook.hasApplication(application);
+        return versionedAddressBook.hasApplication(application);
     }
 
     @Override
     public void deleteApplication(Application target) {
-        addressBook.removeApplication(target);
+        versionedAddressBook.removeApplication(target);
     }
 
     @Override
     public void addApplication(Application application) {
-        addressBook.addApplication(application);
+        versionedAddressBook.addApplication(application);
         updateFilteredApplicationList(PREDICATE_SHOW_ALL_APPLICATIONS);
     }
 
     @Override
     public void setApplication(Application target, Application editedApplication) {
         requireAllNonNull(target, editedApplication);
-        addressBook.setApplication(target, editedApplication);
+        versionedAddressBook.setApplication(target, editedApplication);
     }
 
     //=========== Filtered Application List Accessors =============================================================
@@ -135,11 +151,11 @@ public class ModelManager implements Model {
     public void updateSortedApplicationList(Comparator<Application> comparator) {
         requireNonNull(comparator);
 
-        List<Application> sortedList = new ArrayList<>(addressBook.getApplicationList());
+        List<Application> sortedList = new ArrayList<>(versionedAddressBook.getApplicationList());
 
         sortedList.sort(comparator);
 
-        addressBook.setApplications(sortedList);
+        versionedAddressBook.setApplications(sortedList);
     }
 
     @Override
@@ -154,7 +170,7 @@ public class ModelManager implements Model {
         }
 
         ModelManager otherModelManager = (ModelManager) other;
-        return addressBook.equals(otherModelManager.addressBook)
+        return versionedAddressBook.equals(otherModelManager.versionedAddressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredApplications.equals(otherModelManager.filteredApplications);
     }

@@ -89,4 +89,8 @@ public interface Model {
 
     /** Update the sorted application list based on the given comparator */
     void updateSortedApplicationList(Comparator<Application> comparator);
+
+    void commitAddressBook();
+    void undoAddressBook();
+    boolean canUndoAddressBook();
 }
