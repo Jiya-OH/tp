@@ -21,10 +21,15 @@ import seedu.address.model.tag.Tag;
 public class ReminderCommand extends Command {
     public static final String COMMAND_WORD = "reminder";
     public static final String REMINDER_TAG_NAME = "Urgent";
+    public static final String MESSAGE_SUCCESS = "Sorted by deadline and updated reminders!";
+    private static final java.util.logging.Logger logger =
+            seedu.address.commons.core.LogsCenter.getLogger(ReminderCommand.class);
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
+        logger.info("Starting reminder command execution...");
+
         //sort by time
         Comparator<Application> comparator = (a1, a2) ->
                 a1.getDeadline().compareTo(a2.getDeadline());
@@ -35,6 +40,12 @@ public class ReminderCommand extends Command {
         LocalDate today = LocalDate.now();
 
         for (Application app : lastShownList) {
+            LocalDate deadlineDate = app.getDeadline().getLocalDate();
+
+            if (deadlineDate == null) {
+                continue;
+            }
+
             long daysBetween = ChronoUnit.DAYS.between(today, app.getDeadline().getLocalDate());
 
             if (daysBetween >= 0 && daysBetween < 3) {
