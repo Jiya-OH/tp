@@ -208,6 +208,29 @@ public class ApplicationCardTest {
     }
 
     @Test
+    public void constructor_withRegularTags_regularTagsDoNotUseReminderRedStyle() throws Exception {
+        Application application = new ApplicationBuilder()
+                .withCompanyName("Google")
+                .withCompanyLocation("Singapore")
+                .withRole("Intern")
+                .withPhone("91234567")
+                .withHrEmail("hr@google.com")
+                .withTags("atag", "ztag")
+                .build();
+
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+        FlowPane tagsPane = getTagsPane(applicationCard);
+
+        Label firstTag = (Label) tagsPane.getChildren().get(0);
+        Label secondTag = (Label) tagsPane.getChildren().get(1);
+
+        assertEquals("atag", firstTag.getText());
+        assertEquals("ztag", secondTag.getText());
+        assertFalse(firstTag.getStyle().contains("#FF0000"));
+        assertFalse(secondTag.getStyle().contains("#FF0000"));
+    }
+
+    @Test
     public void constructor_withUrgentTag_setsRedBackgroundStyle() throws Exception {
         // 1. 准备带有 ReminderCommand 中定义的 "Urgent" 标签的申请
         String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
