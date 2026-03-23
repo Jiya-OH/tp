@@ -24,6 +24,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.application.Application;
 import seedu.address.model.application.Company;
+import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
 import seedu.address.model.application.Phone;
 import seedu.address.model.application.Role;
@@ -40,16 +41,16 @@ public class EditCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the application identified "
             + "by the index number used in the displayed application list. "
             + "Existing values will be overwritten by the input values.\n"
+            + "Example: " + COMMAND_WORD + " 1 "
+            + PREFIX_PHONE + "91234567 "
+            + PREFIX_HREMAIL + "hr@example.com\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_ROLE + "ROLE] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_HREMAIL + "EMAIL] "
             + "[" + PREFIX_COMPANY_NAME + "COMPANY_NAME] "
             + "[" + PREFIX_COMPANY_LOCATION + "COMPANY_LOCATION] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_PHONE + "91234567 "
-            + PREFIX_HREMAIL + "hr@example.com";
+            + "[" + PREFIX_TAG + "TAG]...";
 
     public static final String MESSAGE_EDIT_APPLICATION_SUCCESS = "Edited Application: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -112,8 +113,11 @@ public class EditCommand extends Command {
         Set<Tag> updatedTags = editApplicationDescriptor.getTags().orElse(applicationToEdit.getTags());
         Status updatedStatus = editApplicationDescriptor.getStatus().orElse(applicationToEdit.getStatus());
 
-        return new Application(updatedRole, updatedPhone, updatedHrEmail, updatedCompany
-                , updatedTags, updatedStatus, applicationToEdit.getDeadline());
+        Deadline updatedDeadline = editApplicationDescriptor.getDeadline()
+                .orElse(applicationToEdit.getDeadline());
+
+        return new Application(updatedRole, updatedPhone, updatedHrEmail, updatedCompany,
+                updatedTags, updatedStatus, updatedDeadline);
     }
 
     @Override
@@ -151,6 +155,7 @@ public class EditCommand extends Command {
         private String companyLocation;
         private Set<Tag> tags;
         private Status status;
+        private Deadline deadline;
 
         public EditApplicationDescriptor() {}
 
@@ -166,13 +171,14 @@ public class EditCommand extends Command {
             setCompanyLocation(toCopy.companyLocation);
             setTags(toCopy.tags);
             setStatus(toCopy.status);
+            setDeadline(toCopy.deadline);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(role, phone, hrEmail, companyName, companyLocation, tags);
+            return CollectionUtil.isAnyNonNull(role, phone, hrEmail, companyName, companyLocation, tags, deadline);
         }
 
         public void setRole(Role role) {
@@ -209,6 +215,14 @@ public class EditCommand extends Command {
 
         public void setCompanyLocation(String companyLocation) {
             this.companyLocation = companyLocation;
+        }
+
+        public void setDeadline(Deadline deadline) {
+            this.deadline = deadline;
+        }
+
+        public Optional<Deadline> getDeadline() {
+            return Optional.ofNullable(deadline);
         }
 
         public Optional<String> getCompanyLocation() {
@@ -267,7 +281,8 @@ public class EditCommand extends Command {
                     && Objects.equals(companyName, otherEditApplicationDescriptor.companyName)
                     && Objects.equals(companyLocation, otherEditApplicationDescriptor.companyLocation)
                     && Objects.equals(tags, otherEditApplicationDescriptor.tags)
-                    && Objects.equals(status, otherEditApplicationDescriptor.status);
+                    && Objects.equals(status, otherEditApplicationDescriptor.status)
+                    && Objects.equals(deadline, otherEditApplicationDescriptor.deadline);
         }
 
         @Override
@@ -280,6 +295,7 @@ public class EditCommand extends Command {
                     .add("companyLocation", companyLocation)
                     .add("tags", tags)
                     .add("status", status)
+                    .add("deadline", deadline)
                     .toString();
         }
     }

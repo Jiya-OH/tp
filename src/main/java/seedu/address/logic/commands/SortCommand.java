@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 import static java.util.Objects.requireNonNull;
 
-public class SortCommand extends Command{
+public class SortCommand extends Command {
     public static final String COMMAND_WORD = "sort";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -31,10 +31,11 @@ public class SortCommand extends Command{
         Comparator<Application> comparator;
 
         if (criteria.equalsIgnoreCase("alphabet")) {
-            // 按 Role 字母排序（升序）
+            // A-Z
             comparator = (a1, a2) -> a1.getRole().roleName
                     .compareToIgnoreCase(a2.getRole().roleName);
         } else if (criteria.equalsIgnoreCase("time")) {
+            // sort by date
             comparator = (a1, a2) -> a1.getDeadline().compareTo(a2.getDeadline());
         } else {
             throw new CommandException("Unknown criteria! Use 'time' or 'alphabet'.");
