@@ -53,7 +53,14 @@ public class ApplicationCardTest {
         assertEquals("hr@google.com", getLabelText(applicationCard, "hrEmail"));
         assertFalse(getLabel(applicationCard, "status").isVisible());
         assertFalse(getLabel(applicationCard, "status").isManaged());
-        // companyLocation is hidden when empty; its text is not guaranteed.
+
+        Label companyLocationLabel = getLabel(applicationCard, "companyLocation");
+        assertFalse(companyLocationLabel.isVisible());
+        assertFalse(companyLocationLabel.isManaged());
+
+        Label deadlineLabel = getLabel(applicationCard, "deadline");
+        assertFalse(deadlineLabel.isVisible());
+        assertFalse(deadlineLabel.isManaged());
     }
 
     @Test
@@ -70,6 +77,25 @@ public class ApplicationCardTest {
 
         assertEquals("Google", getLabelText(applicationCard, "companyName"));
         assertEquals("Singapore", getLabelText(applicationCard, "companyLocation"));
+    }
+
+    @Test
+    public void constructor_withDeadline_setsDeadlineVisibleAndText() throws Exception {
+        Application application = new ApplicationBuilder()
+                .withCompanyName("Google")
+                .withCompanyLocation("Singapore")
+                .withRole("Intern")
+                .withPhone("91234567")
+                .withHrEmail("hr@google.com")
+                .withDeadline("2026-12-31")
+                .build();
+
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+
+        Label deadlineLabel = getLabel(applicationCard, "deadline");
+        assertTrue(deadlineLabel.isVisible());
+        assertTrue(deadlineLabel.isManaged());
+        assertEquals("Deadline: " + application.getDeadline().value, getLabelText(applicationCard, "deadline"));
     }
 
     @Test
