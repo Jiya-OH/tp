@@ -25,6 +25,10 @@ public class ApplicationCardTest {
 
     @BeforeAll
     public static void initJfxRuntime() throws Exception {
+        System.setProperty("prism.order", "sw");
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+
         CountDownLatch latch = new CountDownLatch(1);
         try {
             Platform.startup(latch::countDown);
@@ -32,6 +36,10 @@ public class ApplicationCardTest {
             latch.countDown();
         }
         assertTrue(latch.await(5, TimeUnit.SECONDS));
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            throw new RuntimeException("The JavaFX toolkit has timed out during startup. "
+                    + "Please check if the JDK architecture matches");
+        }
     }
 
     @Test
@@ -194,6 +202,54 @@ public class ApplicationCardTest {
         ApplicationCard applicationCard = new ApplicationCard(application, 1);
         FlowPane tagsPane = getTagsPane(applicationCard);
 
+        assertTrue(tagsPane.getChildren().stream()
+                .map(node -> (Label) node)
+                .anyMatch(label -> label.getText().equals("offered")));
+    }
+
+    @Test
+    public void constructor_withUrgentTag_setsRedBackgroundStyle() throws Exception {
+        // 1. 准备带有 ReminderCommand 中定义的 "Urgent" 标签的申请
+        String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
+        Application application = new ApplicationBuilder()
+                .withTags(reminderTag)
+                .build();
+
+        // 2. 创建 Card 实例
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+        FlowPane tagsPane = getTagsPane(applicationCard);
+
+        // 3. 利用反射获取生成的 Label 并验证样式
+        Label urgentLabel = (Label) tagsPane.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .filter(label -> label.getText().equals(reminderTag))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Urgent tag label not found"));
+
+        // 4. 验证是否应用了红色背景样式
+        String style = urgentLabel.getStyle();
+        assertTrue(style.contains("-fx-background-color: #FF0000"),
+                "Urgent tag should be red. Current style: " + style);
+    }
+
+    @Test
+    public void constructor_afterRedoState_displaysUpdatedInfo() throws Exception {
+        // 模拟 Redo 执行后，数据被恢复到之前的状态 (例如 Deadline 和 Status 发生了变化)
+        Application redoStateApp = new ApplicationBuilder()
+                .withRole("Cloud Engineer")
+                .withStatus(Status.OFFERED)
+                .withDeadline("2026-05-20")
+                .build();
+
+        ApplicationCard applicationCard = new ApplicationCard(redoStateApp, 2);
+
+        // 验证 UI 是否正确展示了恢复后的数据
+        assertEquals("2. ", getLabelText(applicationCard, "id"));
+        assertEquals("Deadline: 2026-05-20", getLabelText(applicationCard, "deadline"));
+
+        // 验证 Status 标签是否正确渲染为小写
+        FlowPane tagsPane = getTagsPane(applicationCard);
         assertTrue(tagsPane.getChildren().stream()
                 .map(node -> (Label) node)
                 .anyMatch(label -> label.getText().equals("offered")));
