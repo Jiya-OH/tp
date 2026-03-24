@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
 import seedu.address.model.application.Application;
 
 /**
- * An UI component that displays information of a {@code Application}.
+ * A UI component that displays information of a {@code Application}.
  */
 public class ApplicationCard extends UiPart<Region> {
 
@@ -96,6 +96,7 @@ public class ApplicationCard extends UiPart<Region> {
 
         String statusText = application.getStatus().toString().toLowerCase();
         Label statusTag = new Label(statusText);
+        statusTag.getStyleClass().add("status-" + statusText.replace(" ", "-"));
         tags.getChildren().add(statusTag);
     }
 }
