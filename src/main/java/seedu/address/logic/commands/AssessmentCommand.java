@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ASSESSMENT_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ASSESSMENT_PLATFORM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_LOCATION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_TIME;
 
 import java.util.List;
 
@@ -20,17 +21,19 @@ import seedu.address.model.application.ApplicationEvent;
 public class AssessmentCommand extends Command {
     public static final String COMMAND_WORD = "assessment";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Sets the online assessment for an application.\n"
-            + "Example: " + COMMAND_WORD + " 1 \n"
-            + PREFIX_EVENT_LOCATION + "home\n"
-            + PREFIX_ASSESSMENT_PLATFORM + "facebook\n"
-            + PREFIX_ASSESSMENT_LINK + "www.facebook.com\n"
-            + "Parameters: INDEX (must be a positive integer) DATE_TIME\n";
+            + "Example: " + COMMAND_WORD + " 1 (Must be a positive integer) "
+            + PREFIX_EVENT_LOCATION + "home "
+            + PREFIX_EVENT_TIME + "2026-03-24 10:00 "
+            + PREFIX_ASSESSMENT_PLATFORM + "HackerRank "
+            + PREFIX_ASSESSMENT_LINK + "www.hackerrank.com ";
+    public static final String DATETIME_USAGE = "Ensure datetime is in yyyy-MM-dd HH:mm format\n";
 
     private final Index index;
     private final ApplicationEvent applicationEvent;
 
     /**
      * Constructs a new AssessmentCommand instance
+     *
      * @param index
      * @param applicationEvent
      */
@@ -64,13 +67,11 @@ public class AssessmentCommand extends Command {
         if (other == this) {
             return true;
         }
-
-        // instanceof handles nulls
         if (!(other instanceof AssessmentCommand)) {
             return false;
         }
-
         AssessmentCommand otherAssessmentCommand = (AssessmentCommand) other;
-        return index.equals(otherAssessmentCommand.index);
+        return index.equals(otherAssessmentCommand.index)
+                && applicationEvent.equals(otherAssessmentCommand.applicationEvent); // add this
     }
 }

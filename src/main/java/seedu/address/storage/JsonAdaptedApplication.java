@@ -1,5 +1,9 @@
 package seedu.address.storage;
 
+import static seedu.address.logic.parser.AssessmentCommandParser.DATETIME_FORMATTER;
+import static seedu.address.model.application.ApplicationEvent.isValidDateTime;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,9 +41,10 @@ class JsonAdaptedApplication {
     @JsonProperty("status")
     private final String status;
     private final String deadline;
+    private final String eventLocation;
+    private final String eventTime;
 
     // OnlineAssessment fields — stored flat, all nullable (assessment is optional)
-    private final String assessmentLocation;
     private final String assessmentPlatform;
     private final String assessmentLink;
     private final String assessmentNotes;
@@ -56,7 +61,8 @@ class JsonAdaptedApplication {
                                   @JsonProperty("tags") List<JsonAdaptedTag> tags,
                                   @JsonProperty("status") String status,
                                   @JsonProperty("deadline") String deadline,
-                                  @JsonProperty("assessmentLocation") String assessmentLocation,
+                                  @JsonProperty("eventLocation") String eventLocation,
+                                  @JsonProperty("eventTime") String eventTime,
                                   @JsonProperty("assessmentPlatform") String assessmentPlatform,
                                   @JsonProperty("assessmentLink") String assessmentLink,
                                   @JsonProperty("assessmentNotes") String assessmentNotes) {
@@ -70,7 +76,8 @@ class JsonAdaptedApplication {
         }
         this.status = status;
         this.deadline = deadline;
-        this.assessmentLocation = assessmentLocation;
+        this.eventLocation = eventLocation;
+        this.eventTime = eventTime;
         this.assessmentPlatform = assessmentPlatform;
         this.assessmentLink = assessmentLink;
         this.assessmentNotes = assessmentNotes;
@@ -96,12 +103,14 @@ class JsonAdaptedApplication {
         // Serialize OnlineAssessment fields if present, otherwise null
         ApplicationEvent event = source.getApplicationEvent();
         if (event instanceof OnlineAssessment oa) {
-            this.assessmentLocation = oa.getLocation();
+            this.eventLocation = oa.getLocation();
+            this.eventTime = oa.getLocalDate().format(DATETIME_FORMATTER);;
             this.assessmentPlatform = oa.getPlatform();
             this.assessmentLink = oa.getLink();
             this.assessmentNotes = oa.getNotes();
         } else {
-            this.assessmentLocation = null;
+            this.eventLocation = null;
+            this.eventTime = null;
             this.assessmentPlatform = null;
             this.assessmentLink = null;
             this.assessmentNotes = null;
@@ -164,6 +173,7 @@ class JsonAdaptedApplication {
                 ? new Deadline(deadline)
                 : Deadline.getEmptyDeadline();
 
+
         Status modelStatus;
         try {
             modelStatus = Status.valueOf(status != null ? status : "APPLIED");
@@ -171,14 +181,18 @@ class JsonAdaptedApplication {
             throw new IllegalValueException("Invalid status: " + status);
         }
 
-        // Deserialize OnlineAssessment only if all required fields are present
         ApplicationEvent modelEvent = null;
-        if (assessmentLocation != null && assessmentPlatform != null && assessmentLink != null) {
+        if (eventLocation != null && eventTime != null
+                && assessmentPlatform != null && assessmentLink != null) {
+            if (!isValidDateTime(eventTime)) {
+                throw new IllegalValueException(ApplicationEvent.DATETIME_CONSTRAINTS);
+            }
+            LocalDateTime modelDateTime = LocalDateTime.parse(eventTime, DATETIME_FORMATTER);
             modelEvent = (assessmentNotes != null)
-                    ? new OnlineAssessment(assessmentLocation, assessmentPlatform, assessmentLink, assessmentNotes)
-                    : new OnlineAssessment(assessmentLocation, assessmentPlatform, assessmentLink);
+                    ? new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform,
+                    assessmentLink, assessmentNotes)
+                    : new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform, assessmentLink);
         }
-
 
 
         return new Application(modelRole, modelPhone, modelHrEmail, modelCompany,

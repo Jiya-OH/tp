@@ -1,6 +1,8 @@
 package seedu.address.model.application;
 
 
+import java.time.LocalDateTime;
+
 /**
  * Represents online assessment that is appointed during the application
  */
@@ -17,8 +19,9 @@ public class OnlineAssessment extends ApplicationEvent {
      * @param link link of online assessment
      * @param notes extra notes of online assessment
      */
-    public OnlineAssessment(String location, String platform, String link, String notes) {
-        super(location);
+    public OnlineAssessment(String location, LocalDateTime dateTime, String platform,
+                            String link, String notes) {
+        super(location, dateTime);
         this.platform = platform;
         this.link = link;
         this.notes = notes;
@@ -30,8 +33,8 @@ public class OnlineAssessment extends ApplicationEvent {
      * @param platform platform of online assessment
      * @param link link of online assessment
      */
-    public OnlineAssessment(String location, String platform, String link) {
-        super(location);
+    public OnlineAssessment(String location, LocalDateTime dateTime, String platform, String link) {
+        super(location, dateTime);
         this.platform = platform;
         this.link = link;
         this.notes = EMPTY_NOTES_VALUE;
@@ -48,5 +51,22 @@ public class OnlineAssessment extends ApplicationEvent {
     public String getNotes() {
         return notes;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof OnlineAssessment)) {
+            return false;
+        }
+        OnlineAssessment otherOnlineAssessment = (OnlineAssessment) other;
+        return getLocation().equals(otherOnlineAssessment.getLocation())
+                && getLocalDate().equals(otherOnlineAssessment.getLocalDate())
+                && platform.equals(otherOnlineAssessment.platform)
+                && link.equals(otherOnlineAssessment.link)
+                && notes.equals(otherOnlineAssessment.notes);
+    }
 }
+
 

@@ -6,6 +6,8 @@ import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -20,10 +22,13 @@ import seedu.address.testutil.ApplicationBuilder;
 
 public class AssessmentCommandTest {
 
+    private static final LocalDateTime VALID_DATETIME = LocalDateTime.of(2026, 12, 31, 23, 59);
+    private static final LocalDateTime ANOTHER_DATETIME = LocalDateTime.of(2026, 6, 15, 10, 0);
+
     private static final ApplicationEvent VALID_EVENT = new OnlineAssessment(
-            "home", "HackerRank", "www.hackerrank.com");
+            "home", VALID_DATETIME, "HackerRank", "www.hackerrank.com");
     private static final ApplicationEvent VALID_EVENT_WITH_NOTES = new OnlineAssessment(
-            "office", "LeetCode", "www.leetcode.com", "bring ID");
+            "office", ANOTHER_DATETIME, "LeetCode", "www.leetcode.com", "bring ID");
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
