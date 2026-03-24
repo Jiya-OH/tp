@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.application.Application;
+import seedu.address.model.application.ApplicationEvent;
 import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
 import seedu.address.model.application.Phone;
@@ -32,6 +33,7 @@ public class ApplicationBuilder {
     private Set<Tag> tags;
     private Status status;
     private Deadline deadline;
+    private ApplicationEvent applicationEvent;
 
     /**
      * Creates a {@code ApplicationBuilder} with the default details.
@@ -45,6 +47,7 @@ public class ApplicationBuilder {
         tags = new HashSet<>();
         status = DEFAULT_STATUS;
         deadline = Deadline.getEmptyDeadline();
+        applicationEvent = null;
     }
 
     /**
@@ -59,6 +62,7 @@ public class ApplicationBuilder {
         tags = new HashSet<>(applicationToCopy.getTags());
         status = applicationToCopy.getStatus();
         deadline = applicationToCopy.getDeadline();
+        applicationEvent = applicationToCopy.getApplicationEvent();
     }
 
     /**
@@ -136,6 +140,14 @@ public class ApplicationBuilder {
     }
 
     /**
+     * Sets the {@code ApplicationEvent} of the {@code Application} that we are building.
+     */
+    public ApplicationBuilder withApplicationEvent(ApplicationEvent validEvent) {
+        this.applicationEvent = validEvent;
+        return this;
+    }
+
+    /**
      * Builds an {@code Application} instance.
      */
     public Application build() {
@@ -143,5 +155,4 @@ public class ApplicationBuilder {
                 new seedu.address.model.application.Company(companyName, companyLocation);
         return new Application(role, phone, hrEmail, company, tags, status, deadline, null);
     }
-
 }

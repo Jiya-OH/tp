@@ -58,4 +58,19 @@ public class AssessmentCommand extends Command {
         model.commitAddressBook();
         return new CommandResult("Online Assessment updated for: " + editedApp.getCompany());
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof AssessmentCommand)) {
+            return false;
+        }
+
+        AssessmentCommand otherAssessmentCommand = (AssessmentCommand) other;
+        return index.equals(otherAssessmentCommand.index);
+    }
 }
