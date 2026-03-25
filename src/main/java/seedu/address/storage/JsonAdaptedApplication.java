@@ -1,5 +1,9 @@
 package seedu.address.storage;
 
+import static seedu.address.logic.parser.AssessmentCommandParser.DATETIME_FORMATTER;
+import static seedu.address.model.application.ApplicationEvent.isValidDateTime;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,10 +15,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.application.Application;
+import seedu.address.model.application.ApplicationEvent;
 import seedu.address.model.application.Company;
 import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
 import seedu.address.model.application.Note;
+import seedu.address.model.application.OnlineAssessment;
 import seedu.address.model.application.Phone;
 import seedu.address.model.application.Role;
 import seedu.address.model.application.Status;
@@ -36,6 +42,13 @@ class JsonAdaptedApplication {
     @JsonProperty("status")
     private final String status;
     private final String deadline;
+    private final String eventLocation;
+    private final String eventTime;
+
+    // OnlineAssessment fields — stored flat, all nullable (assessment is optional)
+    private final String assessmentPlatform;
+    private final String assessmentLink;
+    private final String assessmentNotes;
     private final String note;
 
     /**
@@ -50,6 +63,11 @@ class JsonAdaptedApplication {
                                   @JsonProperty("tags") List<JsonAdaptedTag> tags,
                                   @JsonProperty("status") String status,
                                   @JsonProperty("deadline") String deadline,
+                                  @JsonProperty("eventLocation") String eventLocation,
+                                  @JsonProperty("eventTime") String eventTime,
+                                  @JsonProperty("assessmentPlatform") String assessmentPlatform,
+                                  @JsonProperty("assessmentLink") String assessmentLink,
+                                  @JsonProperty("assessmentNotes") String assessmentNotes,
                                   @JsonProperty("note") String note) {
         this.role = role;
         this.phone = phone;
@@ -61,6 +79,11 @@ class JsonAdaptedApplication {
         }
         this.status = status;
         this.deadline = deadline;
+        this.eventLocation = eventLocation;
+        this.eventTime = eventTime;
+        this.assessmentPlatform = assessmentPlatform;
+        this.assessmentLink = assessmentLink;
+        this.assessmentNotes = assessmentNotes;
         this.note = note;
     }
 
@@ -77,7 +100,25 @@ class JsonAdaptedApplication {
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
         this.status = source.getStatus().name();
-        this.deadline = source.getDeadline().value;
+        this.deadline = (source.getDeadline() != null)
+                ? source.getDeadline().value
+                : null;
+
+        // Serialize OnlineAssessment fields if present, otherwise null
+        ApplicationEvent event = source.getApplicationEvent();
+        if (event instanceof OnlineAssessment oa) {
+            this.eventLocation = oa.getLocation();
+            this.eventTime = oa.getLocalDate().format(DATETIME_FORMATTER);;
+            this.assessmentPlatform = oa.getPlatform();
+            this.assessmentLink = oa.getLink();
+            this.assessmentNotes = oa.getNotes();
+        } else {
+            this.eventLocation = null;
+            this.eventTime = null;
+            this.assessmentPlatform = null;
+            this.assessmentLink = null;
+            this.assessmentNotes = null;
+        }
         this.note = source.getNote().value;
     }
 
@@ -87,6 +128,7 @@ class JsonAdaptedApplication {
      * @throws IllegalValueException if there were any data constraints violated in the adapted application.
      */
     public Application toModelType() throws IllegalValueException {
+
         final List<Tag> applicationTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             applicationTags.add(tag.toModelType());
@@ -136,6 +178,7 @@ class JsonAdaptedApplication {
                 ? new Deadline(deadline)
                 : Deadline.getEmptyDeadline();
 
+
         Status modelStatus;
         try {
             modelStatus = Status.valueOf(status != null ? status : "APPLIED");
@@ -143,9 +186,22 @@ class JsonAdaptedApplication {
             throw new IllegalValueException("Invalid status: " + status);
         }
 
+        ApplicationEvent modelEvent = null;
+        if (eventLocation != null && eventTime != null
+                && assessmentPlatform != null && assessmentLink != null) {
+            if (!isValidDateTime(eventTime)) {
+                throw new IllegalValueException(ApplicationEvent.DATETIME_CONSTRAINTS);
+            }
+            LocalDateTime modelDateTime = LocalDateTime.parse(eventTime, DATETIME_FORMATTER);
+            modelEvent = (assessmentNotes != null)
+                    ? new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform,
+                    assessmentLink, assessmentNotes)
+                    : new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform, assessmentLink);
+        }
+
         final Note modelNote = new Note(note != null ? note : "");
 
         return new Application(modelRole, modelPhone, modelHrEmail, modelCompany,
-                modelTags, modelStatus, modelDeadline, modelNote);
+                modelTags, modelStatus, modelDeadline, modelEvent, modelNote);
     }
 }

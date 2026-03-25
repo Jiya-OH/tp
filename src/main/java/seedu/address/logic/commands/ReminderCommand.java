@@ -61,7 +61,8 @@ public class ReminderCommand extends Command {
         Set<Tag> newTags = new HashSet<>(app.getTags());
         newTags.add(new Tag(REMINDER_TAG_NAME));
         return new Application(app.getRole(), app.getPhone(), app.getHrEmail(),
-                app.getCompany(), newTags, app.getStatus(), app.getDeadline(), app.getNote());
+                app.getCompany(), newTags, app.getStatus(), app.getDeadline(),
+                app.getApplicationEvent(), app.getNote());
     }
 
 }

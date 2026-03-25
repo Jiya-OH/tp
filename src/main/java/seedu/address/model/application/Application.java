@@ -31,6 +31,8 @@ public class Application {
     // Deadline field
     private final Deadline deadline;
 
+    //ApplicationEvent fields
+    private final ApplicationEvent applicationEvent;
     // Note field
     private final Note note;
 
@@ -38,7 +40,7 @@ public class Application {
      * Every field must be present and not null.
      */
     public Application(Role role, Phone phone, HrEmail hrEmail, Company company, Set<Tag> tags,
-                       Status status, Deadline deadline, Note note) {
+                       Status status, Deadline deadline, ApplicationEvent applicationEvent, Note note) {
         requireAllNonNull(role, phone, hrEmail, company, tags, status, deadline, note);
         this.role = role;
         this.phone = phone;
@@ -47,11 +49,18 @@ public class Application {
         this.tags.addAll(tags);
         this.status = status;
         this.deadline = deadline;
+        this.applicationEvent = applicationEvent;
         this.note = note;
     }
 
     /**
      * Constructs a new Application with status APPLIED, empty deadline, and empty note by default.
+     *
+     * @param role
+     * @param phone
+     * @param hrEmail
+     * @param company
+     * @param tags
      */
     public Application(Role role, Phone phone, HrEmail hrEmail, Company company, Set<Tag> tags) {
         requireAllNonNull(role, phone, hrEmail, company, tags);
@@ -62,6 +71,7 @@ public class Application {
         this.tags.addAll(tags);
         this.status = Status.APPLIED;
         this.deadline = Deadline.getEmptyDeadline();
+        this.applicationEvent = null;
         this.note = new Note("");
     }
 
@@ -89,6 +99,9 @@ public class Application {
         return deadline;
     }
 
+    public ApplicationEvent getApplicationEvent() {
+        return applicationEvent;
+    }
     public Note getNote() {
         return note;
     }
@@ -125,11 +138,11 @@ public class Application {
             return true;
         }
 
-        if (!(other instanceof Application)) {
+        // instanceof handles nulls
+        if (!(other instanceof Application otherApplication)) {
             return false;
         }
 
-        Application otherApplication = (Application) other;
         return role.equals(otherApplication.role)
                 && phone.equals(otherApplication.phone)
                 && hrEmail.equals(otherApplication.hrEmail)

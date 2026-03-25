@@ -20,7 +20,7 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_FIELDS =
             "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_INVALID_STATUS = "Invalid status! \n%1$s";
-
+    public static final String MESSAGE_INVALID_DATETIME = "Invalid DateTime! \n%1$s";
     /**
      * Returns an error message indicating the duplicate prefixes.
      */

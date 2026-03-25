@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.application.Application;
+import seedu.address.model.application.ApplicationEvent;
 import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
 import seedu.address.model.application.Note;
@@ -34,6 +35,7 @@ public class ApplicationBuilder {
     private Set<Tag> tags;
     private Status status;
     private Deadline deadline;
+    private ApplicationEvent applicationEvent;
     private Note note;
 
     /**
@@ -48,6 +50,7 @@ public class ApplicationBuilder {
         tags = new HashSet<>();
         status = DEFAULT_STATUS;
         deadline = Deadline.getEmptyDeadline();
+        applicationEvent = null;
         note = new Note(DEFAULT_NOTE);
     }
 
@@ -63,6 +66,7 @@ public class ApplicationBuilder {
         tags = new HashSet<>(applicationToCopy.getTags());
         status = applicationToCopy.getStatus();
         deadline = applicationToCopy.getDeadline();
+        applicationEvent = applicationToCopy.getApplicationEvent();
         note = applicationToCopy.getNote();
     }
 
@@ -141,6 +145,13 @@ public class ApplicationBuilder {
     }
 
     /**
+     * Sets the {@code ApplicationEvent} of the {@code Application} that we are building.
+     */
+    public ApplicationBuilder withApplicationEvent(ApplicationEvent validEvent) {
+        this.applicationEvent = validEvent;
+        return this;
+    }
+    /**
      * Sets the {@code Note} of the {@code Application} that we are building.
      */
     public ApplicationBuilder withNote(String note) {
@@ -154,7 +165,6 @@ public class ApplicationBuilder {
     public Application build() {
         seedu.address.model.application.Company company =
                 new seedu.address.model.application.Company(companyName, companyLocation);
-        return new Application(role, phone, hrEmail, company, tags, status, deadline, note);
+        return new Application(role, phone, hrEmail, company, tags, status, deadline, null, note);
     }
-
 }
