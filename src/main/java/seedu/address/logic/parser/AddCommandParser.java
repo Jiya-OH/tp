@@ -56,7 +56,6 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         Company company = new Company(companyName, companyLocation);
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-        
         Note note = ParserUtil.parseNote(argMultimap.getValue(PREFIX_NOTE).orElse(""));
 
         Application application = new Application(role, phone, hrEmail, company, tagList,
