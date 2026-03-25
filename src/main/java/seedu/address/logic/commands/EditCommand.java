@@ -284,7 +284,6 @@ public class EditCommand extends Command {
         public Optional<ApplicationEvent> getApplicationEvent() {
             return Optional.ofNullable(applicationEvent);
         }
-        
         public void setNote(Note note) {
             this.note = note;
         }
