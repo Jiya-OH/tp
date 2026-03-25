@@ -135,7 +135,7 @@ public class ParserUtil {
         }
         return tagSet;
     }
-    
+
     /**
      * Parses a {@code String deadline} into a {@code Deadline}.
      * Leading and trailing whitespaces will be trimmed.

@@ -15,15 +15,15 @@ Hired! is a **desktop app for managing internship applications, optimized for us
 1. Ensure you have Java `17` or above installed on your computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from the [project release page](https://github.com/AY2526S2-CS2103T-T13-3/tp/releases/tag/v1.0).
+2. Download the latest `.jar` file from the [project release page](https://github.com/AY2526S2-CS2103T-T13-3/tp/releases/tag/v1.0).
 
-1. Copy the file to the folder you want to use as the _home folder_ for Hired!.
+3. Copy the file to the folder you want to use as the _home folder_ for Hired!.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and run the application using `java -jar hired.jar`.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and run the application using `java -jar hired.jar`.<br>
    A GUI similar to the one below should appear in a few seconds. Note that the app contains some sample application records.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. For example, typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. For example, typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
     * `list` : Lists all application records.
@@ -33,7 +33,7 @@ Hired! is a **desktop app for managing internship applications, optimized for us
     * `clear` : Deletes all application records.
     * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ Format: `list`
 
 Edits the details of an existing application in Hired!.
 
-Format: `edit INDEX [r/ROLE] [p/PHONE] [e/EMAIL] [c/COMPANY_NAME] [l/COMPANY_LOCATION] [t/TAG]... [note/NOTE]`
+Format: `edit INDEX [r/ROLE] [p/PHONE] [e/EMAIL] [c/COMPANY_NAME] [l/COMPANY_LOCATION] [t/TAG] [s/STATUS] [d/DEADLINE]... [note/NOTE]`
 
 * Edits the application at the specified `INDEX`.
 * The index refers to the index number shown in the displayed application list.
@@ -166,6 +166,15 @@ Format: `status INDEX s/STATUS`
 Examples:
 * `status 1 s/OFFERED` changes the status to `offered`
 * `status 1 s/selected` will result in an error as `selected` is not a given status.
+
+### Adding or changing the deadline: `deadline INDEX YYYY-MM-DD` 
+
+Tips: Note that we can change deadline and status by either using their own command, or using the general edit command.
+Examples:
+* `status 1 s/OFFERED` is equivalent to `edit 1 s/OFFERED`
+* `deadline 2 2026-03-25` is equivalent to `edit 2 d/2026-03-25`
+This is intended to give user more flexibility in entering command.
+This is a feature not a bug.
 
 ### Deleting an application : `delete`
 
