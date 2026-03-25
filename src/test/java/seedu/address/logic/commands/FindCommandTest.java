@@ -7,7 +7,6 @@ import static seedu.address.logic.Messages.MESSAGE_APPLICATIONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalApplications.SHOPEE_FD;
 import static seedu.address.testutil.TypicalApplications.GRAB_PM;
-import static seedu.address.testutil.TypicalApplications.FIONA;
 import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -71,7 +70,7 @@ public class FindCommandTest {
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(SHOPEE_FD, GRAB_PM, FIONA), model.getFilteredApplicationList());
+        assertEquals(Arrays.asList(SHOPEE_FD, GRAB_PM), model.getFilteredApplicationList());
     }
 
     @Test
