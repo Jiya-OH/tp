@@ -28,6 +28,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DEADLINE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HREMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -43,7 +44,9 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditApplicationDescriptor;
 import seedu.address.model.application.Company;
+import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
+import seedu.address.model.application.Note;
 import seedu.address.model.application.Phone;
 import seedu.address.model.application.Role;
 import seedu.address.model.tag.Tag;
@@ -247,9 +250,33 @@ public class EditCommandParserTest {
     @Test
     public void parse_invalidNote_failure() {
         Index targetIndex = INDEX_FIRST_APPLICATION;
-        String longNote = "a".repeat(1001); // 超过 1000 字符限制
+        String longNote = "a".repeat(1001);
         String userInput = targetIndex.getOneBased() + " " + PREFIX_NOTE + longNote;
 
         assertParseFailure(parser, userInput, Note.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_emptyDeadline_success() {
+        Index targetIndex = INDEX_FIRST_APPLICATION;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_DEADLINE + "  ";
+
+        EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder()
+                .withDeadline("").build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_emptyNote_success() {
+        Index targetIndex = INDEX_FIRST_APPLICATION;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_NOTE + "  ";
+
+        EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder()
+                .withNote("").build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 }
