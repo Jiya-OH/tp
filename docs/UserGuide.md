@@ -243,7 +243,7 @@ Examples:
 
 Reverses the most recent `undo` command.
 
-Format: redo
+Format: `redo`
 
 * You must perform at least one `undo` command before you can use `redo`.
 * If you attempt to redo when no undoable state exists, an error message "No undoable state to redo. Please perform an undo first." will be shown.
@@ -251,6 +251,19 @@ Format: redo
 
 Examples:
 * clear followed by `undo` (restores data), then `redo` (clears data again).
+
+### Attaching your resume : `resume`
+
+Attaches your resume to a specific application.
+
+Format: `resume INDEX rp/RESUME_PATH` / `openresume INDEX` / `removeresume INDEX`
+
+* You must specify the path of you resume。
+* This feature will not save your resume in the storage, but just a reference to your own documentation.
+* Please don't change the path of the file or it will result in unexpected errors.
+
+Examples:
+* `resume 1 rp/C:\Users\qiyu\Documents\resume.pdf` will attach your resume to the first application.
 
 ### Clearing all entries : `clear`
 
