@@ -304,7 +304,7 @@ public class ApplicationCardTest {
             ApplicationCard applicationCard = new ApplicationCard(application, 1);
             FlowPane tagsPane = getTagsPane(applicationCard);
 
-            Label urgentLabel = (Label) tagsPane.getChildren().stream()
+            Label urgentLabel = tagsPane.getChildren().stream()
                     .filter(node -> node instanceof Label)
                     .map(node -> (Label) node)
                     .filter(label -> label.getText().equals(reminderTag))
@@ -325,7 +325,7 @@ public class ApplicationCardTest {
             ApplicationCard applicationCard = new ApplicationCard(application, 1);
             FlowPane tagsPane = getTagsPane(applicationCard);
 
-            Label urgentLabel = (Label) tagsPane.getChildren().stream()
+            Label urgentLabel = tagsPane.getChildren().stream()
                     .filter(node -> node instanceof Label)
                     .map(node -> (Label) node)
                     .filter(label -> label.getText().equals("URGENT"))
@@ -333,6 +333,31 @@ public class ApplicationCardTest {
                     .orElseThrow(() -> new AssertionError("Uppercase urgent tag label not found"));
 
             assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+        });
+    }
+
+    @Test
+    public void constructor_withMixedCaseUrgentTag_hasUrgentStyleClass() throws Exception {
+        runOnFxThread(() -> {
+            String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
+            String mixedCaseTag = reminderTag.substring(0, 1).toUpperCase()
+                    + reminderTag.substring(1).toLowerCase();
+            Application application = new ApplicationBuilder()
+                    .withTags(mixedCaseTag)
+                    .build();
+
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            FlowPane tagsPane = getTagsPane(applicationCard);
+
+            Label urgentLabel = tagsPane.getChildren().stream()
+                    .filter(node -> node instanceof Label)
+                    .map(node -> (Label) node)
+                    .filter(label -> label.getText().equalsIgnoreCase(reminderTag))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError("Mixed case urgent tag label not found"));
+
+            assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"),
+                    "Mixed case urgent tag should have 'tag-urgent' CSS class");
         });
     }
 
@@ -383,6 +408,22 @@ public class ApplicationCardTest {
             ApplicationCard applicationCard = new ApplicationCard(application, 1);
             Label statusTag = getStatusTag(applicationCard, "withdrawn");
             assertTrue(statusTag.getStyleClass().contains("status-withdrawn"));
+        });
+    }
+
+    @Test
+    public void constructor_allStatuses_addsCorrectStyleClass() throws Exception {
+        runOnFxThread(() -> {
+            for (Status status : Status.values()) {
+                Application application = new ApplicationBuilder()
+                        .withStatus(status)
+                        .build();
+                ApplicationCard applicationCard = new ApplicationCard(application, 1);
+                String expectedStyleClass = "status-" + status.toString().toLowerCase();
+                Label statusTag = getStatusTag(applicationCard, status.toString().toLowerCase());
+                assertTrue(statusTag.getStyleClass().contains(expectedStyleClass),
+                        "Status tag should have '" + expectedStyleClass + "' CSS class");
+            }
         });
     }
 
@@ -484,47 +525,6 @@ public class ApplicationCardTest {
     }
 
     @Test
-    public void constructor_allStatuses_addsCorrectStyleClass() throws Exception {
-        runOnFxThread(() -> {
-            for (Status status : Status.values()) {
-                Application application = new ApplicationBuilder()
-                        .withStatus(status)
-                        .build();
-                ApplicationCard applicationCard = new ApplicationCard(application, 1);
-                String expectedStyleClass = "status-" + status.toString().toLowerCase();
-                Label statusTag = getStatusTag(applicationCard, status.toString().toLowerCase());
-                assertTrue(statusTag.getStyleClass().contains(expectedStyleClass),
-                        "Status tag should have '" + expectedStyleClass + "' CSS class");
-            }
-        });
-    }
-
-    @Test
-    public void constructor_withMixedCaseUrgentTag_hasUrgentStyleClass() throws Exception {
-        runOnFxThread(() -> {
-            String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
-            String mixedCaseTag = reminderTag.substring(0, 1).toUpperCase()
-                    + reminderTag.substring(1).toLowerCase();
-            Application application = new ApplicationBuilder()
-                    .withTags(mixedCaseTag)
-                    .build();
-
-            ApplicationCard applicationCard = new ApplicationCard(application, 1);
-            FlowPane tagsPane = getTagsPane(applicationCard);
-
-            Label urgentLabel = (Label) tagsPane.getChildren().stream()
-                    .filter(node -> node instanceof Label)
-                    .map(node -> (Label) node)
-                    .filter(label -> label.getText().equalsIgnoreCase(reminderTag))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError("Mixed case urgent tag label not found"));
-
-            assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"),
-                    "Mixed case urgent tag should have 'tag-urgent' CSS class");
-        });
-    }
-
-    @Test
     public void constructor_allOptionalFieldsPresent_allVisible() throws Exception {
         runOnFxThread(() -> {
             OnlineAssessment event = new OnlineAssessment(
@@ -587,7 +587,7 @@ public class ApplicationCardTest {
 
     private Label getStatusTag(ApplicationCard card, String statusText) throws Exception {
         FlowPane tagsPane = getTagsPane(card);
-        return (Label) tagsPane.getChildren().stream()
+        return tagsPane.getChildren().stream()
                 .filter(node -> node instanceof Label)
                 .map(node -> (Label) node)
                 .filter(label -> label.getText().equals(statusText))
