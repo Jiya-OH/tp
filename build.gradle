@@ -69,4 +69,9 @@ shadowJar {
     archiveFileName = 'hired.jar'
 }
 
+run {
+    enableAssertions = true
+}
+
+
 defaultTasks 'clean', 'test'

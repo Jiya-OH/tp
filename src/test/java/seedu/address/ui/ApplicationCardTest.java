@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,14 +16,18 @@ import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import seedu.address.model.application.Application;
+import seedu.address.model.application.OnlineAssessment;
 import seedu.address.model.application.Status;
 import seedu.address.testutil.ApplicationBuilder;
 
 @DisabledOnOs(OS.LINUX)
 public class ApplicationCardTest {
+
+    private static final LocalDateTime VALID_DATETIME = LocalDateTime.of(2026, 12, 31, 23, 59);
 
     @BeforeAll
     public static void initJfxRuntime() throws Exception {
@@ -36,316 +42,453 @@ public class ApplicationCardTest {
             latch.countDown();
         }
         assertTrue(latch.await(5, TimeUnit.SECONDS));
-        if (!latch.await(5, TimeUnit.SECONDS)) {
-            throw new RuntimeException("The JavaFX toolkit has timed out during startup. "
-                    + "Please check if the JDK architecture matches");
+    }
+
+    // ==================== Helper to run on FX thread ====================
+
+    /**
+     * Runs the given {@code action} on the JavaFX Application Thread and waits
+     * for it to complete. Any exception thrown inside the action is rethrown
+     * in the test thread.
+     */
+    private void runOnFxThread(ThrowingRunnable action) throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicReference<Throwable> error = new AtomicReference<>();
+        Platform.runLater(() -> {
+            try {
+                action.run();
+            } catch (Throwable t) {
+                error.set(t);
+            } finally {
+                latch.countDown();
+            }
+        });
+        assertTrue(latch.await(10, TimeUnit.SECONDS), "FX thread timed out");
+        if (error.get() != null) {
+            throw new Exception(error.get());
         }
     }
 
+    @FunctionalInterface
+    private interface ThrowingRunnable {
+        void run() throws Exception;
+    }
+
+    // ==================== Tests ====================
+
     @Test
     public void constructor_setsDisplayedFieldsCorrectly() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        assertEquals(application, applicationCard.application);
-        assertEquals("1. ", getLabelText(applicationCard, "id"));
-        assertEquals("Google", getLabelText(applicationCard, "companyName"));
-        assertEquals("Intern", getLabelText(applicationCard, "role"));
-        assertEquals("91234567", getLabelText(applicationCard, "phone"));
-        assertEquals("hr@google.com", getLabelText(applicationCard, "hrEmail"));
-        assertFalse(getLabel(applicationCard, "status").isVisible());
-        assertFalse(getLabel(applicationCard, "status").isManaged());
-
-        Label companyLocationLabel = getLabel(applicationCard, "companyLocation");
-        assertFalse(companyLocationLabel.isVisible());
-        assertFalse(companyLocationLabel.isManaged());
-
-        Label deadlineLabel = getLabel(applicationCard, "deadline");
-        assertFalse(deadlineLabel.isVisible());
-        assertFalse(deadlineLabel.isManaged());
-
-        Label noteLabel = getLabel(applicationCard, "note");
-        assertFalse(noteLabel.isVisible());
-        assertFalse(noteLabel.isManaged());
+            assertEquals(application, applicationCard.application);
+            assertEquals("1. ", getLabelText(applicationCard, "id"));
+            assertEquals("Google", getLabelText(applicationCard, "companyName"));
+            assertEquals("Intern", getLabelText(applicationCard, "role"));
+            assertEquals("91234567", getLabelText(applicationCard, "phone"));
+            assertEquals("hr@google.com", getLabelText(applicationCard, "hrEmail"));
+            assertFalse(getLabel(applicationCard, "status").isVisible());
+            assertFalse(getLabel(applicationCard, "status").isManaged());
+            assertFalse(getLabel(applicationCard, "companyLocation").isVisible());
+            assertFalse(getLabel(applicationCard, "companyLocation").isManaged());
+            assertFalse(getLabel(applicationCard, "deadline").isVisible());
+            assertFalse(getLabel(applicationCard, "deadline").isManaged());
+            assertFalse(getLabel(applicationCard, "note").isVisible());
+            assertFalse(getLabel(applicationCard, "note").isManaged());
+        });
     }
 
     @Test
     public void constructor_withCompanyLocation_setsLocationVisibleAndText() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        assertEquals("Google", getLabelText(applicationCard, "companyName"));
-        assertEquals("Singapore", getLabelText(applicationCard, "companyLocation"));
+            assertEquals("Google", getLabelText(applicationCard, "companyName"));
+            assertEquals("Singapore", getLabelText(applicationCard, "companyLocation"));
+        });
     }
 
     @Test
     public void constructor_withDeadline_setsDeadlineVisibleAndText() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .withDeadline("2026-12-31")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withDeadline("2026-12-31")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        Label deadlineLabel = getLabel(applicationCard, "deadline");
-        assertTrue(deadlineLabel.isVisible());
-        assertTrue(deadlineLabel.isManaged());
-        assertEquals("Deadline: " + application.getDeadline().value, getLabelText(applicationCard, "deadline"));
+            Label deadlineLabel = getLabel(applicationCard, "deadline");
+            assertTrue(deadlineLabel.isVisible());
+            assertTrue(deadlineLabel.isManaged());
+            assertEquals("Deadline: " + application.getDeadline().value,
+                    getLabelText(applicationCard, "deadline"));
+        });
     }
 
     @Test
     public void constructor_withNote_setsNoteVisibleAndText() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .withNote("Follow up in 3 days")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withNote("Follow up in 3 days")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        Label noteLabel = getLabel(applicationCard, "note");
-        assertTrue(noteLabel.isVisible());
-        assertTrue(noteLabel.isManaged());
-        assertEquals("Note: " + application.getNote().value, getLabelText(applicationCard, "note"));
+            Label noteLabel = getLabel(applicationCard, "note");
+            assertTrue(noteLabel.isVisible());
+            assertTrue(noteLabel.isManaged());
+            assertEquals("Note: " + application.getNote().value,
+                    getLabelText(applicationCard, "note"));
+        });
     }
 
     @Test
     public void constructor_withTags_displaysAllTagsSorted() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .withTags("ztag", "atag")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withTags("ztag", "atag")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        FlowPane tagsPane = getTagsPane(applicationCard);
-        assertEquals(3, tagsPane.getChildren().size());
-        assertEquals("atag", ((Label) tagsPane.getChildren().get(0)).getText());
-        assertEquals("ztag", ((Label) tagsPane.getChildren().get(1)).getText());
-        assertEquals("applied", ((Label) tagsPane.getChildren().get(2)).getText());
+            FlowPane tagsPane = getTagsPane(applicationCard);
+            assertEquals(3, tagsPane.getChildren().size());
+            assertEquals("atag", ((Label) tagsPane.getChildren().get(0)).getText());
+            assertEquals("ztag", ((Label) tagsPane.getChildren().get(1)).getText());
+            assertEquals("applied", ((Label) tagsPane.getChildren().get(2)).getText());
+        });
     }
 
     @Test
     public void constructor_statusLabelHiddenAndStatusTagAdded() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        Label statusLabel = getLabel(applicationCard, "status");
-        FlowPane tagsPane = getTagsPane(applicationCard);
-
-        assertFalse(statusLabel.isVisible());
-        assertFalse(statusLabel.isManaged());
-
-        assertTrue(tagsPane.getChildren().stream()
-                .map(node -> (Label) node)
-                .anyMatch(label -> label.getText().equals("applied")));
+            assertFalse(getLabel(applicationCard, "status").isVisible());
+            assertFalse(getLabel(applicationCard, "status").isManaged());
+            assertTrue(getTagsPane(applicationCard).getChildren().stream()
+                    .map(node -> (Label) node)
+                    .anyMatch(label -> label.getText().equals("applied")));
+        });
     }
 
     @Test
     public void constructor_withExistingTags_addsStatusTagAsWell() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .withTags("atag", "ztag")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withTags("atag", "ztag")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            FlowPane tagsPane = getTagsPane(applicationCard);
 
-        FlowPane tagsPane = getTagsPane(applicationCard);
-
-        assertEquals(3, tagsPane.getChildren().size());
-        assertEquals("atag", ((Label) tagsPane.getChildren().get(0)).getText());
-        assertEquals("ztag", ((Label) tagsPane.getChildren().get(1)).getText());
-        assertEquals("applied", ((Label) tagsPane.getChildren().get(2)).getText());
+            assertEquals(3, tagsPane.getChildren().size());
+            assertEquals("atag", ((Label) tagsPane.getChildren().get(0)).getText());
+            assertEquals("ztag", ((Label) tagsPane.getChildren().get(1)).getText());
+            assertEquals("applied", ((Label) tagsPane.getChildren().get(2)).getText());
+        });
     }
 
     @Test
     public void constructor_withoutUserTags_addsOnlyStatusTag() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-        FlowPane tagsPane = getTagsPane(applicationCard);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            FlowPane tagsPane = getTagsPane(applicationCard);
 
-        assertEquals(1, tagsPane.getChildren().size());
-        assertEquals("applied", ((Label) tagsPane.getChildren().get(0)).getText());
+            assertEquals(1, tagsPane.getChildren().size());
+            assertEquals("applied", ((Label) tagsPane.getChildren().get(0)).getText());
+        });
     }
 
     @Test
     public void constructor_withDifferentStatus_statusTagMatchesLowercaseStatus() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withCompanyLocation("Singapore")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .withStatus(Status.OFFERED)
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withCompanyLocation("Singapore")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withStatus(Status.OFFERED)
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-        FlowPane tagsPane = getTagsPane(applicationCard);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        assertTrue(tagsPane.getChildren().stream()
-                .map(node -> (Label) node)
-                .anyMatch(label -> label.getText().equals("offered")));
+            assertTrue(getTagsPane(applicationCard).getChildren().stream()
+                    .map(node -> (Label) node)
+                    .anyMatch(label -> label.getText().equals("offered")));
+        });
     }
 
     @Test
     public void constructor_withRegularTags_regularTagsDoNotUseUrgentStyle() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withCompanyName("Google")
-                .withRole("Intern")
-                .withPhone("91234567")
-                .withHrEmail("hr@google.com")
-                .withTags("atag", "ztag")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withTags("atag", "ztag")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-        FlowPane tagsPane = getTagsPane(applicationCard);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            FlowPane tagsPane = getTagsPane(applicationCard);
 
-        Label firstTag = (Label) tagsPane.getChildren().get(0);
-        Label secondTag = (Label) tagsPane.getChildren().get(1);
+            Label firstTag = (Label) tagsPane.getChildren().get(0);
+            Label secondTag = (Label) tagsPane.getChildren().get(1);
 
-        assertEquals("atag", firstTag.getText());
-        assertEquals("ztag", secondTag.getText());
-        assertFalse(firstTag.getStyleClass().contains("tag-urgent"));
-        assertFalse(secondTag.getStyleClass().contains("tag-urgent"));
+            assertFalse(firstTag.getStyleClass().contains("tag-urgent"));
+            assertFalse(secondTag.getStyleClass().contains("tag-urgent"));
+        });
     }
 
     @Test
     public void constructor_withUrgentTag_hasUrgentStyleClass() throws Exception {
-        String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
-        Application application = new ApplicationBuilder()
-                .withTags(reminderTag)
-                .build();
+        runOnFxThread(() -> {
+            String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
+            Application application = new ApplicationBuilder()
+                    .withTags(reminderTag)
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-        FlowPane tagsPane = getTagsPane(applicationCard);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            FlowPane tagsPane = getTagsPane(applicationCard);
 
-        Label urgentLabel = (Label) tagsPane.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .filter(label -> label.getText().equals(reminderTag))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Urgent tag label not found"));
+            Label urgentLabel = (Label) tagsPane.getChildren().stream()
+                    .filter(node -> node instanceof Label)
+                    .map(node -> (Label) node)
+                    .filter(label -> label.getText().equals(reminderTag))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError("Urgent tag label not found"));
 
-        assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"),
-                "Urgent tag should have 'tag-urgent' CSS class");
+            assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+        });
     }
 
     @Test
     public void constructor_withUppercaseUrgentTag_stillHasUrgentStyleClass() throws Exception {
-        Application application = new ApplicationBuilder()
-                .withTags("URGENT")
-                .build();
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withTags("URGENT")
+                    .build();
 
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-        FlowPane tagsPane = getTagsPane(applicationCard);
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            FlowPane tagsPane = getTagsPane(applicationCard);
 
-        Label urgentLabel = (Label) tagsPane.getChildren().stream()
-                .filter(node -> node instanceof Label)
-                .map(node -> (Label) node)
-                .filter(label -> label.getText().equals("URGENT"))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Uppercase urgent tag label not found"));
+            Label urgentLabel = (Label) tagsPane.getChildren().stream()
+                    .filter(node -> node instanceof Label)
+                    .map(node -> (Label) node)
+                    .filter(label -> label.getText().equals("URGENT"))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError("Uppercase urgent tag label not found"));
 
-        assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+            assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+        });
     }
 
     @Test
     public void constructor_statusApplied_hasAppliedStyleClass() throws Exception {
-        Application application = new ApplicationBuilder().withStatus(Status.APPLIED).build();
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-
-        Label statusTag = getStatusTag(applicationCard, "applied");
-        assertTrue(statusTag.getStyleClass().contains("status-applied"),
-                "Status tag should have 'status-applied' CSS class");
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder().withStatus(Status.APPLIED).build();
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Label statusTag = getStatusTag(applicationCard, "applied");
+            assertTrue(statusTag.getStyleClass().contains("status-applied"));
+        });
     }
 
     @Test
     public void constructor_statusOffered_hasOfferedStyleClass() throws Exception {
-        Application application = new ApplicationBuilder().withStatus(Status.OFFERED).build();
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-
-        Label statusTag = getStatusTag(applicationCard, "offered");
-        assertTrue(statusTag.getStyleClass().contains("status-offered"),
-                "Status tag should have 'status-offered' CSS class");
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder().withStatus(Status.OFFERED).build();
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Label statusTag = getStatusTag(applicationCard, "offered");
+            assertTrue(statusTag.getStyleClass().contains("status-offered"));
+        });
     }
 
     @Test
     public void constructor_statusRejected_hasRejectedStyleClass() throws Exception {
-        Application application = new ApplicationBuilder().withStatus(Status.REJECTED).build();
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-
-        Label statusTag = getStatusTag(applicationCard, "rejected");
-        assertTrue(statusTag.getStyleClass().contains("status-rejected"),
-                "Status tag should have 'status-rejected' CSS class");
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder().withStatus(Status.REJECTED).build();
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Label statusTag = getStatusTag(applicationCard, "rejected");
+            assertTrue(statusTag.getStyleClass().contains("status-rejected"));
+        });
     }
 
     @Test
     public void constructor_statusInterviewing_hasInterviewingStyleClass() throws Exception {
-        Application application = new ApplicationBuilder().withStatus(Status.INTERVIEWING).build();
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-
-        Label statusTag = getStatusTag(applicationCard, "interviewing");
-        assertTrue(statusTag.getStyleClass().contains("status-interviewing"),
-                "Status tag should have 'status-interviewing' CSS class");
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder().withStatus(Status.INTERVIEWING).build();
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Label statusTag = getStatusTag(applicationCard, "interviewing");
+            assertTrue(statusTag.getStyleClass().contains("status-interviewing"));
+        });
     }
 
     @Test
     public void constructor_statusWithdrawn_hasWithdrawnStyleClass() throws Exception {
-        Application application = new ApplicationBuilder().withStatus(Status.WITHDRAWN).build();
-        ApplicationCard applicationCard = new ApplicationCard(application, 1);
-
-        Label statusTag = getStatusTag(applicationCard, "withdrawn");
-        assertTrue(statusTag.getStyleClass().contains("status-withdrawn"),
-                "Status tag should have 'status-withdrawn' CSS class");
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder().withStatus(Status.WITHDRAWN).build();
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Label statusTag = getStatusTag(applicationCard, "withdrawn");
+            assertTrue(statusTag.getStyleClass().contains("status-withdrawn"));
+        });
     }
+
+    @Test
+    public void constructor_withNoApplicationEvent_eventButtonHidden() throws Exception {
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .build();
+
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Button eventButton = getEventButton(applicationCard);
+
+            assertFalse(eventButton.isVisible());
+            assertFalse(eventButton.isManaged());
+        });
+    }
+
+    @Test
+    public void constructor_withApplicationEvent_eventButtonVisible() throws Exception {
+        runOnFxThread(() -> {
+            OnlineAssessment event = new OnlineAssessment(
+                    "home", VALID_DATETIME, "HackerRank", "www.hackerrank.com");
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withApplicationEvent(event)
+                    .build();
+
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Button eventButton = getEventButton(applicationCard);
+
+            assertTrue(eventButton.isVisible());
+            assertTrue(eventButton.isManaged());
+        });
+    }
+
+    @Test
+    public void constructor_withApplicationEventWithNotes_eventButtonVisible() throws Exception {
+        runOnFxThread(() -> {
+            OnlineAssessment event = new OnlineAssessment(
+                    "office", VALID_DATETIME, "LeetCode", "www.leetcode.com", "bring ID");
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withApplicationEvent(event)
+                    .build();
+
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            Button eventButton = getEventButton(applicationCard);
+
+            assertTrue(eventButton.isVisible());
+            assertTrue(eventButton.isManaged());
+        });
+    }
+
+    @Test
+    public void constructor_withNoApplicationEvent_eventDetailsWindowNotShowing() throws Exception {
+        runOnFxThread(() -> {
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .build();
+
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            EventDetailsWindow window = getEventDetailsWindow(applicationCard);
+
+            assertFalse(window.isShowing());
+        });
+    }
+
+    @Test
+    public void constructor_withApplicationEvent_eventDetailsWindowNotShowingUntilClicked() throws Exception {
+        runOnFxThread(() -> {
+            OnlineAssessment event = new OnlineAssessment(
+                    "home", VALID_DATETIME, "HackerRank", "www.hackerrank.com");
+            Application application = new ApplicationBuilder()
+                    .withCompanyName("Google")
+                    .withRole("Intern")
+                    .withPhone("91234567")
+                    .withHrEmail("hr@google.com")
+                    .withApplicationEvent(event)
+                    .build();
+
+            ApplicationCard applicationCard = new ApplicationCard(application, 1);
+            EventDetailsWindow window = getEventDetailsWindow(applicationCard);
+
+            assertFalse(window.isShowing());
+        });
+    }
+
+    // ==================== Reflection helpers ====================
 
     private String getLabelText(ApplicationCard card, String fieldName) throws Exception {
         Field field = ApplicationCard.class.getDeclaredField(fieldName);
         field.setAccessible(true);
-        Label label = (Label) field.get(card);
-        return label.getText();
+        return ((Label) field.get(card)).getText();
     }
 
     private Label getLabel(ApplicationCard card, String fieldName) throws Exception {
@@ -358,6 +501,18 @@ public class ApplicationCardTest {
         Field field = ApplicationCard.class.getDeclaredField("tags");
         field.setAccessible(true);
         return (FlowPane) field.get(card);
+    }
+
+    private Button getEventButton(ApplicationCard card) throws Exception {
+        Field field = ApplicationCard.class.getDeclaredField("eventButton");
+        field.setAccessible(true);
+        return (Button) field.get(card);
+    }
+
+    private EventDetailsWindow getEventDetailsWindow(ApplicationCard card) throws Exception {
+        Field field = ApplicationCard.class.getDeclaredField("eventDetailsWindow");
+        field.setAccessible(true);
+        return (EventDetailsWindow) field.get(card);
     }
 
     private Label getStatusTag(ApplicationCard card, String statusText) throws Exception {
