@@ -122,22 +122,89 @@ public class RemoveResumeCommandTest {
             commitCalled = true;
         }
 
-        @Override public void setUserPrefs(ReadOnlyUserPrefs userPrefs) { throw new AssertionError(); }
-        @Override public ReadOnlyUserPrefs getUserPrefs() { throw new AssertionError(); }
-        @Override public GuiSettings getGuiSettings() { throw new AssertionError(); }
-        @Override public void setGuiSettings(GuiSettings guiSettings) { throw new AssertionError(); }
-        @Override public Path getAddressBookFilePath() { throw new AssertionError(); }
-        @Override public void setAddressBookFilePath(Path addressBookFilePath) { throw new AssertionError(); }
-        @Override public void setAddressBook(ReadOnlyAddressBook addressBook) { throw new AssertionError(); }
-        @Override public ReadOnlyAddressBook getAddressBook() { throw new AssertionError(); }
-        @Override public boolean hasApplication(Application application) { throw new AssertionError(); }
-        @Override public void deleteApplication(Application target) { throw new AssertionError(); }
-        @Override public void addApplication(Application application) { throw new AssertionError(); }
-        @Override public void updateFilteredApplicationList(Predicate<Application> predicate) { throw new AssertionError(); }
-        @Override public void updateSortedApplicationList(Comparator<Application> comparator) { throw new AssertionError(); }
-        @Override public void undoAddressBook() { throw new AssertionError(); }
-        @Override public boolean canUndoAddressBook() { return false; }
-        @Override public void redoAddressBook() { throw new AssertionError(); }
-        @Override public boolean canRedoAddressBook() { return false; }
+        @Override
+        public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public ReadOnlyUserPrefs getUserPrefs() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public GuiSettings getGuiSettings() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void setGuiSettings(GuiSettings guiSettings) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public Path getAddressBookFilePath() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void setAddressBook(ReadOnlyAddressBook addressBook) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public boolean hasApplication(Application application) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void deleteApplication(Application target) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void addApplication(Application application) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void updateFilteredApplicationList(Predicate<Application> predicate) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void updateSortedApplicationList(Comparator<Application> comparator) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public void undoAddressBook() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public boolean canUndoAddressBook() {
+            return false;
+        }
+
+        @Override
+        public void redoAddressBook() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public boolean canRedoAddressBook() {
+            return false;
+        }
     }
 }
