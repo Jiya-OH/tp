@@ -9,15 +9,21 @@ Class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
 Class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
 Class "<<interface>>\nModel" as Model
 Class AddressBook
+Class VersionedAddressBook
 Class ModelManager
 Class UserPrefs
 
-Class UniquePersonList
-Class Person
-Class Address
-Class Email
-Class Name
+Class UniqueApplicationList
+Class Application
+Class Company
+Class Role
 Class Phone
+Class HrEmail
+Class Deadline
+Class Status
+Class ApplicationEvent
+Class OnlineAssessment
+Class Note
 Class Tag
 
 Class I #FFFFFF
@@ -28,27 +34,35 @@ HiddenOutside ..> Model
 
 AddressBook .up.|> ReadOnlyAddressBook
 
+VersionedAddressBook -up-|> AddressBook
 ModelManager .up.|> Model
 Model .right.> ReadOnlyUserPrefs
 Model .left.> ReadOnlyAddressBook
-ModelManager -left-> "1" AddressBook
+ModelManager -left-> "1" VersionedAddressBook
 ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
-AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+AddressBook *--> "1" UniqueApplicationList
+UniqueApplicationList --> "~* all" Application
+Application *--> Company
+Application *--> Role
+Application *--> Phone
+Application *--> HrEmail
+Application *--> Deadline
+Application *--> Status
+Application *--> Note
+Application *--> "*" Tag
+Application --> "0..1" ApplicationEvent
+OnlineAssessment -up-|> ApplicationEvent
 
-Person -[hidden]up--> I
-UniquePersonList -[hidden]right-> I
+Application -[hidden]up--> I
+UniqueApplicationList -[hidden]right-> I
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Company -[hidden]right-> Role
+Role -[hidden]right-> Phone
+Phone -[hidden]right-> HrEmail
+Deadline -[hidden]right-> Status
+Status -[hidden]right-> Note
 
-ModelManager --> "~* filtered" Person
+ModelManager --> "~* filtered" Application
 @enduml
