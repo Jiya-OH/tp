@@ -54,36 +54,36 @@ public class ApplicationCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         role.setText(application.getRole().roleName);
 
-        phone.setText("☎ " + application.getPhone().value);
-        hrEmail.setText("✉ " + application.getHrEmail().value);
-        companyName.setText("▣ " + application.getCompany().companyName);
+        phone.setText(formatPhone(application.getPhone().value));
+        hrEmail.setText(formatHrEmail(application.getHrEmail().value));
+        companyName.setText(formatCompanyName(application.getCompany().companyName));
 
         if (application.getCompany().companyLocation.isEmpty()) {
             companyLocation.setVisible(false);
             companyLocation.setManaged(false);
         } else {
-            companyLocation.setText("⌂ " + application.getCompany().companyLocation);
+            companyLocation.setText(formatCompanyLocation(application.getCompany().companyLocation));
         }
 
         if (application.getDeadline().isEmpty()) {
             deadline.setVisible(false);
             deadline.setManaged(false);
         } else {
-            deadline.setText("◷ " + application.getDeadline().value);
+            deadline.setText(formatDeadline(application.getDeadline().value));
         }
 
         if (application.getNote().value.isEmpty()) {
             note.setVisible(false);
             note.setManaged(false);
         } else {
-            note.setText("✎ " + application.getNote().value);
+            note.setText(formatNote(application.getNote().value));
         }
 
         if (application.getResume().isEmpty()) {
             resume.setVisible(false);
             resume.setManaged(false);
         } else {
-            resume.setText("▣ " + application.getResume().value);
+            resume.setText(formatResume(application.getResume().value));
         }
 
         status.setVisible(false);
@@ -103,5 +103,33 @@ public class ApplicationCard extends UiPart<Region> {
         Label statusTag = new Label(statusText);
         statusTag.getStyleClass().add("status-" + statusText.replace(" ", "-"));
         tags.getChildren().add(statusTag);
+    }
+
+    static String formatPhone(String value) {
+        return "☎ " + value;
+    }
+
+    static String formatHrEmail(String value) {
+        return "✉ " + value;
+    }
+
+    static String formatCompanyName(String value) {
+        return "▣ " + value;
+    }
+
+    static String formatCompanyLocation(String value) {
+        return "⌂ " + value;
+    }
+
+    static String formatDeadline(String value) {
+        return "◷ " + value;
+    }
+
+    static String formatNote(String value) {
+        return "✎ " + value;
+    }
+
+    static String formatResume(String value) {
+        return "▣ " + value;
     }
 }
