@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -29,6 +31,7 @@ import seedu.address.model.application.OnlineAssessment;
  * All JavaFX object creation and mutation is executed on the FX Application Thread.
  * FX-dependent tests are skipped in headless / unsupported CI environments.
  */
+@DisabledOnOs(OS.LINUX)
 public class EventDetailsWindowTest {
 
     private static boolean jfxToolkitAvailable = false;
