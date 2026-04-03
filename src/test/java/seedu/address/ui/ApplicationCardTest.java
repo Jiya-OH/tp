@@ -28,10 +28,16 @@ public class ApplicationCardTest {
         try {
             Platform.startup(latch::countDown);
         } catch (IllegalStateException e) {
-            // JavaFX toolkit already initialized.
+            // Toolkit already running (normal case when another test class started it first).
+            latch.countDown();
+        } catch (NullPointerException e) {
+            // Monocle is active and the toolkit was already initialised by a prior test class
+            // (e.g. EventDetailsWindowTest via ApplicationExtension). Monocle's startup path
+            // does not always throw IllegalStateException — it may NPE instead. Treat this
+            // the same way: toolkit is up, proceed normally.
             latch.countDown();
         } catch (UnsupportedOperationException e) {
-            // Headless / unsupported environment (e.g., CI on Linux without JavaFX toolkit).
+            // Truly headless environment with no toolkit support at all — skip FX tests.
             jfxToolkitAvailable = false;
             return;
         }
