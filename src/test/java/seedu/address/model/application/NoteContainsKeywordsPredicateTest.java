@@ -21,15 +21,25 @@ public class NoteContainsKeywordsPredicateTest {
         NoteContainsKeywordsPredicate secondPredicate =
                 new NoteContainsKeywordsPredicate(Collections.singletonList("recruiter"));
 
+        // Same object -> returns true
         assertTrue(firstPredicate.equals(firstPredicate));
+
+        // Same values -> returns true
         assertTrue(firstPredicate.equals(new NoteContainsKeywordsPredicate(Collections.singletonList("follow"))));
+
+        // Different type -> returns false
         assertFalse(firstPredicate.equals(1));
+
+        // Null -> returns false
         assertFalse(firstPredicate.equals(null));
+
+        // Different predicate -> returns false
         assertFalse(firstPredicate.equals(secondPredicate));
     }
 
     @Test
     public void test_noteContainsKeywords_returnsTrue() {
+        // EP: note contains at least one valid keyword
         NoteContainsKeywordsPredicate predicate =
                 new NoteContainsKeywordsPredicate(Arrays.asList("follow", "recruiter"));
 
@@ -47,6 +57,7 @@ public class NoteContainsKeywordsPredicateTest {
 
     @Test
     public void test_noteDoesNotContainKeywords_returnsFalse() {
+        // EP: note contains none of the keywords
         NoteContainsKeywordsPredicate predicate =
                 new NoteContainsKeywordsPredicate(Arrays.asList("follow", "recruiter"));
 
@@ -59,6 +70,8 @@ public class NoteContainsKeywordsPredicateTest {
 
     @Test
     public void test_emptyNote_returnsFalse() {
+        // EP: empty note
+        // Boundary value: empty string
         NoteContainsKeywordsPredicate predicate =
                 new NoteContainsKeywordsPredicate(Collections.singletonList("follow"));
 
@@ -67,5 +80,18 @@ public class NoteContainsKeywordsPredicateTest {
                 .build();
 
         assertFalse(predicate.test(application));
+    }
+
+    @Test
+    public void test_multipleKeywordsOneMatch_returnsTrue() {
+        // EP: multiple keywords, one matching is enough
+        NoteContainsKeywordsPredicate predicate =
+                new NoteContainsKeywordsPredicate(Arrays.asList("follow", "recruiter", "offer"));
+
+        Application application = new ApplicationBuilder(GOOGLE_SWE)
+                .withNote("Waiting for recruiter reply")
+                .build();
+
+        assertTrue(predicate.test(application));
     }
 }

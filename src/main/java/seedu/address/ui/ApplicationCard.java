@@ -173,3 +173,4 @@ public class ApplicationCard extends UiPart<Region> {
         return value;
     }
 }
+
