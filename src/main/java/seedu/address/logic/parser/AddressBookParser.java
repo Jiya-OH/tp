@@ -23,6 +23,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.OpenResumeCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.ReminderCommand;
+import seedu.address.logic.commands.RemoveEventCommand;
 import seedu.address.logic.commands.RemoveResumeCommand;
 import seedu.address.logic.commands.ResumeCommand;
 import seedu.address.logic.commands.SortCommand;
@@ -115,6 +116,9 @@ public class AddressBookParser {
         case RemoveResumeCommand.COMMAND_WORD:
             return new RemoveResumeCommandParser().parse(arguments);
 
+        case RemoveEventCommand.COMMAND_WORD:
+            return new RemoveEventCommandParser().parse(arguments);
+
         case OpenResumeCommand.COMMAND_WORD:
             return new OpenResumeCommandParser().parse(arguments);
 
@@ -123,5 +127,4 @@ public class AddressBookParser {
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
     }
-
 }

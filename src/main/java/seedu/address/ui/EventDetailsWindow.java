@@ -54,7 +54,6 @@ public class EventDetailsWindow extends UiPart<Stage> {
         dateTimeLabel.setText(vm.getDateTime());
         platformLabel.setText(vm.getPlatform());
         linkLabel.setText(vm.getLink());
-        notesLabel.setText(vm.getNotes());
     }
 
     /** Shows the event details window. */

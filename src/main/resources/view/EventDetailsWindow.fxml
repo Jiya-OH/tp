@@ -67,14 +67,6 @@
                            styleClass="event-detail-value"
                            wrapText="true"
                            GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-                    <Label text="Notes:"
-                           styleClass="event-detail-key"
-                           GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                    <Label fx:id="notesLabel"
-                           styleClass="event-detail-value"
-                           wrapText="true"
-                           GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 </GridPane>
 
                 <Separator />
