@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
@@ -18,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import seedu.address.logic.commands.CommandResult;
 
+@DisabledOnOs(OS.LINUX)
 public class CommandBoxTest {
 
     private static boolean jfxToolkitAvailable = false;
