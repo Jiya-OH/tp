@@ -7,10 +7,8 @@ import java.time.LocalDateTime;
  * Represents online assessment that is appointed during the application
  */
 public class OnlineAssessment extends ApplicationEvent {
-    public static final String EMPTY_NOTES_VALUE = "No notes set";
     private final String platform;
     private final String link;
-    private final String notes;
 
     /**
      * Constructs an OnlineAssessment class
@@ -24,7 +22,6 @@ public class OnlineAssessment extends ApplicationEvent {
         super(location, dateTime);
         this.platform = platform;
         this.link = link;
-        this.notes = notes;
     }
 
     /**
@@ -37,7 +34,6 @@ public class OnlineAssessment extends ApplicationEvent {
         super(location, dateTime);
         this.platform = platform;
         this.link = link;
-        this.notes = EMPTY_NOTES_VALUE;
     }
 
     public String getPlatform() {
@@ -46,10 +42,6 @@ public class OnlineAssessment extends ApplicationEvent {
 
     public String getLink() {
         return link;
-    }
-
-    public String getNotes() {
-        return notes;
     }
 
     @Override
@@ -64,8 +56,7 @@ public class OnlineAssessment extends ApplicationEvent {
         return getLocation().equals(otherOnlineAssessment.getLocation())
                 && getLocalDate().equals(otherOnlineAssessment.getLocalDate())
                 && platform.equals(otherOnlineAssessment.platform)
-                && link.equals(otherOnlineAssessment.link)
-                && notes.equals(otherOnlineAssessment.notes);
+                && link.equals(otherOnlineAssessment.link);
     }
 }
 

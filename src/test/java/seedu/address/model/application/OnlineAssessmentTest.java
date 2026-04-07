@@ -20,7 +20,6 @@ public class OnlineAssessmentTest {
         assertEquals(VALID_DATETIME, oa.getLocalDate());
         assertEquals("HackerRank", oa.getPlatform());
         assertEquals("www.hackerrank.com", oa.getLink());
-        assertEquals("bring notes", oa.getNotes());
     }
 
     @Test
@@ -31,7 +30,6 @@ public class OnlineAssessmentTest {
         assertEquals(VALID_DATETIME, oa.getLocalDate());
         assertEquals("HackerRank", oa.getPlatform());
         assertEquals("www.hackerrank.com", oa.getLink());
-        assertEquals(OnlineAssessment.EMPTY_NOTES_VALUE, oa.getNotes());
     }
 
     @Test
@@ -80,12 +78,6 @@ public class OnlineAssessmentTest {
     public void getNotes_customNotes_returnsCorrectNotes() {
         OnlineAssessment oa = new OnlineAssessment("home", VALID_DATETIME,
                 "HackerRank", "www.hackerrank.com", "custom notes");
-        assertEquals("custom notes", oa.getNotes());
-    }
-
-    @Test
-    public void emptyNotesValue_isCorrectConstant() {
-        assertEquals("No notes set", OnlineAssessment.EMPTY_NOTES_VALUE);
     }
 
     @Test

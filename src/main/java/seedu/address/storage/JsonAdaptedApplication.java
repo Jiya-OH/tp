@@ -50,7 +50,6 @@ class JsonAdaptedApplication {
     // OnlineAssessment fields — stored flat, all nullable (assessment is optional)
     private final String assessmentPlatform;
     private final String assessmentLink;
-    private final String assessmentNotes;
     private final String note;
 
     /**
@@ -86,7 +85,6 @@ class JsonAdaptedApplication {
         this.eventTime = eventTime;
         this.assessmentPlatform = assessmentPlatform;
         this.assessmentLink = assessmentLink;
-        this.assessmentNotes = assessmentNotes;
         this.note = note;
         this.resume = resume;
     }
@@ -115,13 +113,11 @@ class JsonAdaptedApplication {
             this.eventTime = oa.getLocalDate().format(DATETIME_FORMATTER);;
             this.assessmentPlatform = oa.getPlatform();
             this.assessmentLink = oa.getLink();
-            this.assessmentNotes = oa.getNotes();
         } else {
             this.eventLocation = null;
             this.eventTime = null;
             this.assessmentPlatform = null;
             this.assessmentLink = null;
-            this.assessmentNotes = null;
         }
         this.note = source.getNote().value;
         this.resume = source.getResume().value;
@@ -198,10 +194,7 @@ class JsonAdaptedApplication {
                 throw new IllegalValueException(ApplicationEvent.DATETIME_CONSTRAINTS);
             }
             LocalDateTime modelDateTime = LocalDateTime.parse(eventTime, DATETIME_FORMATTER);
-            modelEvent = (assessmentNotes != null)
-                    ? new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform,
-                    assessmentLink, assessmentNotes)
-                    : new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform, assessmentLink);
+            modelEvent = new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform, assessmentLink);
         }
 
         final Note modelNote = new Note(note != null ? note : "");

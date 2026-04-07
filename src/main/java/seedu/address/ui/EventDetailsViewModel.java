@@ -22,7 +22,6 @@ public class EventDetailsViewModel {
     private final String dateTime;
     private final String platform;
     private final String link;
-    private final String notes;
 
     /**
      * Builds a view model from the given {@code ApplicationEvent}.
@@ -37,12 +36,10 @@ public class EventDetailsViewModel {
             this.title = "Online Assessment Details";
             this.platform = oa.getPlatform();
             this.link = oa.getLink();
-            this.notes = oa.getNotes();
         } else {
             this.title = "Event Details";
             this.platform = "N/A";
             this.link = "N/A";
-            this.notes = "N/A";
         }
     }
 
@@ -64,9 +61,5 @@ public class EventDetailsViewModel {
 
     public String getLink() {
         return link;
-    }
-
-    public String getNotes() {
-        return notes;
     }
 }

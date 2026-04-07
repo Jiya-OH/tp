@@ -66,7 +66,6 @@ public class EventDetailsWindowTest {
         assertEquals("20 Jul 2026, 14:30", vm.getDateTime());
         assertEquals("HackerRank", vm.getPlatform());
         assertEquals("https://hr.com/test", vm.getLink());
-        assertEquals("Bring passport", vm.getNotes());
     }
 
     @Test
@@ -75,8 +74,6 @@ public class EventDetailsWindowTest {
         OnlineAssessment oa = new OnlineAssessment("Office", dt, "Codility", "https://c.com");
 
         EventDetailsViewModel vm = new EventDetailsViewModel(oa);
-
-        assertEquals(OnlineAssessment.EMPTY_NOTES_VALUE, vm.getNotes());
     }
 
     @Test
@@ -106,7 +103,6 @@ public class EventDetailsWindowTest {
         assertEquals("05 Sep 2026, 09:00", vm.getDateTime());
         assertEquals("N/A", vm.getPlatform());
         assertEquals("N/A", vm.getLink());
-        assertEquals("N/A", vm.getNotes());
     }
 
     @Test
@@ -130,7 +126,6 @@ public class EventDetailsWindowTest {
 
         assertEquals("N/A", vm.getPlatform());
         assertEquals("N/A", vm.getLink());
-        assertEquals("N/A", vm.getNotes());
     }
 
     // -----------------------------------------------------------------------
@@ -147,19 +142,12 @@ public class EventDetailsWindowTest {
         assertEquals(dt, oa.getLocalDate());
         assertEquals("HackerRank", oa.getPlatform());
         assertEquals("https://hr.com/test", oa.getLink());
-        assertEquals("Bring passport", oa.getNotes());
     }
 
     @Test
     public void onlineAssessment_noNotesConstructor_usesEmptyNotesDefault() {
         LocalDateTime dt = LocalDateTime.of(2026, 8, 10, 10, 0);
         OnlineAssessment oa = new OnlineAssessment("Office", dt, "Codility", "https://c.com");
-        assertEquals(OnlineAssessment.EMPTY_NOTES_VALUE, oa.getNotes());
-    }
-
-    @Test
-    public void onlineAssessment_emptyNotesValue_isNotBlank() {
-        assertFalse(OnlineAssessment.EMPTY_NOTES_VALUE.isBlank());
     }
 
     @Test
