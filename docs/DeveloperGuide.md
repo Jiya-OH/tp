@@ -281,33 +281,62 @@ How the `add` command works:
 1. The updated application book state is committed through `Model#commitAddressBook()`.
 
 
-## (just idea, you can change)
 ## Delete Feature
+
+`delete` is already covered by the core Logic sequence walkthrough in the Design section
+([`DeleteSequenceDiagram`](images/DeleteSequenceDiagram.png)).
+This section focuses on features that have additional design considerations (`edit`, `deadline`).
 
 ## Edit Feature
 
-## Tag Feature ?
-* add
-* delete
-* edit
+The sequence diagram below shows the main interactions for `edit`.
+To keep the diagram readable, low-level parsing and field-by-field replacement logic are intentionally omitted.
 
-## Status Feature
-* add
-* delete
-* edit
+![Interactions Inside the Logic Component for the `edit` Command](images/EditSequenceDiagram-Logic.png)
+
+The class diagram below gives a focused view of the `edit`/`deadline` command area in `Logic` and its links to
+core `Model` entities.
+
+![Focused Class Structure for Edit and Deadline](images/EditDeadlineClassDiagram.png)
+
+How the `edit` command works (high-level):
+
+1. `LogicManager` forwards user input to `AddressBookParser`.
+1. `AddressBookParser` creates `EditCommandParser`, which parses index + provided fields.
+1. `EditCommand` validates index and duplicate constraints, then builds an updated `Application`.
+1. `EditCommand` updates the target via `Model#setApplication(...)` and commits via `Model#commitAddressBook()`.
+1. A `CommandResult` is returned to the UI through `LogicManager`.
 
 ## Deadline Feature
-* add
-* delete
-* edit
 
-## Note Feature
-* add
-* delete
-* edit
+The sequence diagram below shows the command flow for `deadline`.
+It highlights command orchestration only; detailed date parsing/validation is abstracted away.
 
-## OA
-## Resume
+![Interactions Inside the Logic Component for the `deadline` Command](images/DeadlineSequenceDiagram-Logic.png)
+
+The following activity diagram summarizes the decision flow for deadline updates:
+
+![Activity Flow for `deadline`](images/DeadlineUpdateActivityDiagram.png)
+
+The object diagram shows the before/after object state during an edit that changes deadline-related fields:
+
+![Object Snapshot Before and After Edit](images/EditDeadlineObjectDiagram.png)
+
+How the `deadline` command works (high-level):
+
+1. `LogicManager` routes input to `AddressBookParser`, then `DeadlineCommandParser`.
+1. `DeadlineCommandParser` parses index and deadline string into a `DeadlineCommand`.
+1. `DeadlineCommand` replaces only the deadline-related part of the target `Application`.
+1. `Model#setApplication(...)` and `Model#commitAddressBook()` persist the state change.
+
+### Why this level of detail
+
+This DG deliberately documents selected feature internals (instead of every command) to stay maintainable while still
+giving developers a roadmap:
+
+* **Where to start**: which command/parser/model classes are involved.
+* **What matters architecturally**: component interactions, mutation points, and commit boundaries.
+* **What is omitted on purpose**: repetitive parser internals and trivial data plumbing already clear from code.
 
 
 --------------------------------------------------------------------------------------------------------------------
