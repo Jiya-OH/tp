@@ -28,11 +28,11 @@ public class ParserUtilTest {
     private static final String INVALID_HREMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
 
-    private static final String VALID_ROLE = "Rachel Walker";
+    private static final String VALID_ROLE = "Software Engineer";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_COMPANY_NAME = "Google";
     private static final String VALID_COMPANY_LOCATION = "Singapore";
-    private static final String VALID_HREMAIL = "rachel@example.com";
+    private static final String VALID_HREMAIL = "hr@google.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
 
@@ -216,4 +216,27 @@ public class ParserUtilTest {
         assertEquals(new Deadline("2026-04-01 12:59"),
                 ParserUtil.parseDeadline("2026-04-01 12:59"));
     }
+
+    @Test
+    public void parseRole_validValueWithInternalWhitespace_returnsNormalizedRole() throws Exception {
+        String roleWithInternalWhitespace = "Software    Engineer";
+        Role expectedRole = new Role(VALID_ROLE);
+        assertEquals(expectedRole, ParserUtil.parseRole(roleWithInternalWhitespace));
+    }
+
+    @Test
+    public void parseRole_validValueWithLeadingTrailingWhitespace_returnsTrimmedRole() throws Exception {
+        String roleWithWhitespace = WHITESPACE + VALID_ROLE + WHITESPACE;
+        Role expectedRole = new Role(VALID_ROLE);
+        assertEquals(expectedRole, ParserUtil.parseRole(roleWithWhitespace));
+    }
+
+    @Test
+    public void parseCompanyName_internalWhitespace_returnsNormalizedName() throws Exception {
+        String nameWithInternalWhitespace = "Google    Inc";
+        String expectedName = "Google Inc";
+        assertEquals(expectedName, ParserUtil.parseCompanyName(nameWithInternalWhitespace));
+    }
+
+
 }
