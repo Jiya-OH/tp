@@ -141,6 +141,9 @@ Format: `add r/ROLE p/PHONE e/EMAIL c/COMPANY_NAME [l/COMPANY_LOCATION] [t/TAG].
 > 3) the same `company location`:
      >    * if both locations are empty (e.g. `l/` is omitted), they are treated as the same;
 >    * if one location is empty and the other is not, they are treated as different.
+> 
+> For duplicate checking, the comparison ignores letter case and whitespace differences in `role`, `company name`, and `company location`.
+> For example, `Software Engineer` and `softwareengineer` are treated as the same role.
 > **Tip:** An application can have any number of tags (including 0).
 > **Tip:** A note can be added when creating an application by using `note/`.
 > **Default after successful add:** status is `APPLIED`, deadline is unset, and reminder color remains default until `reminder` is enabled.
