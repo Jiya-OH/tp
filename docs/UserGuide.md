@@ -279,7 +279,7 @@ These defaults are useful when you are trying commands for the first time:
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Opens the help window, which contains the User Guide URL.
 
 ![help message](images/helpMessage.png)
 
@@ -358,20 +358,20 @@ Examples:
 
 ### Locating applications by role: `find`
 
-Finds applications whose roles contain any of the given keywords.
+Finds applications whose roles contain all given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g. `engineer` will match `Engineer`
-* The order of the keywords does not matter.
+* The order of the keywords matters. e.g. `soft eng` will match `Software Engineer`.
 * Only the role is searched.
 * Partial words will also be matched. e.g. `eng` will match `Engineer`
-* Applications matching at least one keyword will be returned, if given more than 1 keyword (i.e. `OR` search).
+* Applications matching all keywords will be returned, if given more than 1 keyword (i.e. `AND` search).
 * At least one keyword must be provided (e.g. `find` alone is invalid).
 
 Examples:
 * `find engineer` returns applications with roles containing `engineer`
-* `find backend frontend` returns applications with roles containing `backend` or `frontend`
+* `find quant research` returns applications with roles containing `quant` and `research`
 
 ### Locating applications by note: `findnote`
 
@@ -392,8 +392,8 @@ Examples:
 
 ### Changing an application's status: `status`
 
-* Changes the status of an application to APPLIED, INTERVIEWING, OFFERED, REJECTED, or WITHDRAWN.
-* The accepted input keywords are apply, interviewing, offered, rejected, and withdraw, and they are not case-sensitive.
+* Changes the status of an application.
+* The accepted input keywords are ***APPLIED, INTERVIEWING, OFFERED, REJECTED, or WITHDRAWN***, and they are not case-sensitive.
 
 Format: `status INDEX s/STATUS`
 
