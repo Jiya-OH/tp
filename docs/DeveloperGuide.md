@@ -281,33 +281,62 @@ How the `add` command works:
 1. The updated application book state is committed through `Model#commitAddressBook()`.
 
 
-## (just idea, you can change)
 ## Delete Feature
+
+`delete` is already covered by the core Logic sequence walkthrough in the Design section
+([`DeleteSequenceDiagram`](images/DeleteSequenceDiagram.png)).
+This section focuses on features that have additional design considerations (`edit`, `deadline`).
 
 ## Edit Feature
 
-## Tag Feature ?
-* add
-* delete
-* edit
+The sequence diagram below shows the main interactions for `edit`.
+To keep the diagram readable, low-level parsing and field-by-field replacement logic are intentionally omitted.
 
-## Status Feature
-* add
-* delete
-* edit
+![Interactions Inside the Logic Component for the `edit` Command](images/EditSequenceDiagram-Logic.png)
+
+The class diagram below gives a focused view of the `edit`/`deadline` command area in `Logic` and its links to
+core `Model` entities.
+
+![Focused Class Structure for Edit and Deadline](images/EditDeadlineClassDiagram.png)
+
+How the `edit` command works (high-level):
+
+1. `LogicManager` forwards user input to `AddressBookParser`.
+1. `AddressBookParser` creates `EditCommandParser`, which parses index + provided fields.
+1. `EditCommand` validates index and duplicate constraints, then builds an updated `Application`.
+1. `EditCommand` updates the target via `Model#setApplication(...)` and commits via `Model#commitAddressBook()`.
+1. A `CommandResult` is returned to the UI through `LogicManager`.
 
 ## Deadline Feature
-* add
-* delete
-* edit
 
-## Note Feature
-* add
-* delete
-* edit
+The sequence diagram below shows the command flow for `deadline`.
+It highlights command orchestration only; detailed date parsing/validation is abstracted away.
 
-## OA
-## Resume
+![Interactions Inside the Logic Component for the `deadline` Command](images/DeadlineSequenceDiagram-Logic.png)
+
+The following activity diagram summarizes the decision flow for deadline updates:
+
+![Activity Flow for `deadline`](images/DeadlineUpdateActivityDiagram.png)
+
+The object diagram shows the before/after object state during an edit that changes deadline-related fields:
+
+![Object Snapshot Before and After Edit](images/EditDeadlineObjectDiagram.png)
+
+How the `deadline` command works (high-level):
+
+1. `LogicManager` routes input to `AddressBookParser`, then `DeadlineCommandParser`.
+1. `DeadlineCommandParser` parses index and deadline string into a `DeadlineCommand`.
+1. `DeadlineCommand` replaces only the deadline-related part of the target `Application`.
+1. `Model#setApplication(...)` and `Model#commitAddressBook()` persist the state change.
+
+### Why this level of detail
+
+This DG deliberately documents selected feature internals (instead of every command) to stay maintainable while still
+giving developers a roadmap:
+
+* **Where to start**: which command/parser/model classes are involved.
+* **What matters architecturally**: component interactions, mutation points, and commit boundaries.
+* **What is omitted on purpose**: repetitive parser internals and trivial data plumbing already clear from code.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -325,6 +354,15 @@ How the `add` command works:
 ## **Appendix: Requirements**
 
 ### Product scope
+
+**Current version scope (implemented):**
+* Manage internship applications as records with role, company/contact details, status, deadline, note, tags, resume link, and optional online assessment event.
+* Support fast CLI-based workflows for add/edit/delete/find/findnote/list/sort/status/deadline/reminder.
+* Support recovery and safety operations (`undo`/`redo`, auto-save to local JSON).
+
+**Near-future scope (planned):**
+* Archive completed applications into a separate view.
+* Richer filtering and reporting/export workflows.
 
 ### Target user profile
 
@@ -349,14 +387,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a … | I want to … | So that I can… |
 | --- | --- | --- | --- |
-| `* * *` | student applying for internships | add a new application record | keep track of the companies and roles I applied to |
-| `* * *` | student applying for internships | record the HR representative’s name | follow up professionally with companies |
-| `* * *` | student applying for internships | record internship roles offered | remember the positions available |
-| `* * *` | student applying for internships | record application deadlines | avoid missing submission dates |
-| `* * *` | student applying for internships | update the status of an application | track whether my application is pending, interviewing, rejected, or offered |
-| `* * *` | student applying for internships | view all my application records | get an overview of my internship applications |
-| `* * *` | student applying for internships | sort applications by deadline | handle urgent applications first |
-| `* * *` | student applying for internships | delete an application record | remove incorrect or outdated entries |
+| `* * *` | student applying for internships | add an application with core details (role/company/contact) | start tracking each opportunity quickly |
+| `* * *` | student applying for internships | list and view all applications | maintain overall visibility of my pipeline |
+| `* * *` | student applying for internships | edit any application fields | keep records accurate as information changes |
+| `* * *` | student applying for internships | delete wrong or obsolete application records | keep my list clean and relevant |
+| `* * *` | student applying for internships | search by role keywords (`find`) | quickly locate target opportunities |
+| `* * *` | student applying for internships | search by note keywords (`findnote`) | retrieve follow-up context efficiently |
+| `* * *` | student applying for internships | update status quickly (`status`) | track my progress stage clearly |
+| `* * *` | student applying for internships | set or clear deadlines (`deadline`) | avoid missing key submission timelines |
+| `* * *` | student applying for internships | sort by deadline or role (`sort`) | prioritize urgent items or browse alphabetically |
+| `* * *` | student applying for internships | highlight urgent/overdue items (`reminder`) | focus immediately on time-sensitive applications |
+| `* * *` | student applying for internships | undo/redo recent data-changing operations | recover safely from mistakes |
+| `* * *` | student applying for internships | attach/open/remove a resume path per application | jump to supporting documents quickly |
+| `* *` | student applying for internships | record online assessment details and remove them later | prepare and manage OA schedules in one place |
 | `* *` | student applying for internships | search by company name or role | quickly find a specific application |
 | `* *` | student applying for internships | categorize companies by industry | organize applications more clearly |
 | `* *` | student applying for internships | tag companies by interest level | prioritize which opportunities to focus on |
@@ -368,69 +411,67 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*` | long-term user | export internship records | analyse my application progress outside the app |
 | `*` | long-term user | view a summary of application outcomes | understand my internship search performance |
 
+Notes:
+* Stories above include both currently implemented and near-future needs.
+* For the current version, implemented stories correspond to commands listed in the User Guide command summary.
+
 ## Use cases
 
 (For all use cases below, the **System** is `Hired!` and the **Actor** is a `student`, unless specified otherwise)
+
+Use cases below intentionally focus on **non-trivial and unique** interaction patterns.
+Simple one-step interactions (e.g., `list`, `help`, `exit`) are covered by User Guide command docs instead.
 
 ### **UC01 - Add an Application Record**
 
 **Precondition**
 
 * System is running
-* Student is authorized.
 
 **MSS**
 
 1. Student requests to add a new internship application.
-2. System requests for application details: company, HR name, role, deadline.
-3. Student provides the required details.
-4. System validates the input.
-5. System saves the application and assigns a unique ID.
-6. System displays the newly added application.
+2. Student provides required details: role, phone, email, company (and optional fields).
+3. System validates the input.
+4. System saves the application.
+5. System displays the newly added application.
 
    Use case ends.
 
 **Extension**
 
-* 3a. Student leaves some fields unknown.
-    * 3a1. Student marks fields as NA.
+* 2a. Student omits optional fields.
+    * 2a1. System applies default values (e.g., default status, empty note/deadline).
 
-      Use case resumes at step 4.
+      Use case resumes at step 3.
 
-* 4a. System detects invalid input (empty company, wrong date format).
-    * 4a1. System shows an error message.
-    * 4a2. Student re‑enters valid data.
+* 3a. System detects invalid input (e.g., format/constraint violations).
+    * 3a1. System shows an error message.
+    * 3a2. Student re-enters valid data.
 
-      Use case resumes at step 4.
+      Use case resumes at step 3.
 
-* 4b. System detects a duplicate application.
-    * 4b1. System informs the student.
-
-      Use case ends.
-
-* *a. Student cancels the add operation at any time.
-    * *a1. System aborts the operation.
+* 4a. System detects a duplicate application.
+    * 4a1. System informs the student.
 
       Use case ends.
 
-
-
-### **UC02 – Update Application Status**
+### **UC02 – Edit an Existing Application**
 
 **Precondition**
 
 * System is running
-* Student is authorized
 * At least one application exists in the system.
+* Application list is visible (possibly filtered).
 
 **MSS**
 
-1. Student requests to update an application’s status.
-2. Student provides an application ID or list index.
+1. Student requests to edit an application.
+2. Student provides a list index and one or more fields to change.
 3. System verifies the application exists.
-4. Student provides a new status.
-5. System validates the status value.
-6. System updates the status.
+4. System validates all provided field values.
+5. System updates the application.
+6. System commits the new state for undo/redo.
 7. System displays the updated application.
 
    Use case ends.
@@ -441,61 +482,76 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 5a. Status value is invalid.
-    * 5a1. System shows valid options.
-    * 5a2. Student enters a valid status.
+* 4a. Any provided field value is invalid.
+    * 4a1. System shows validation error.
+    * 4a2. Student re-enters valid values.
 
-      Use case resumes at step 5.
+      Use case resumes at step 4.
 
-* 6a. Status is a terminal state (e.g., Rejected/Offered).
-    * 6a1. System shows a warning and requests confirmation.
-    * 6a2. Student confirms.
-
-      Use case resumes at step 6.
-
-* *a. Student cancels at any time.
-    * *a1. System cancels the update.
+* 5a. Edited record duplicates an existing application identity.
+    * 5a1. System rejects the edit and shows duplicate error.
 
       Use case ends.
 
-
-### **UC03 – List and Sort Applications**
+### **UC03 – Manage deadline urgency (deadline + reminder)**
 
 **Precondition**
-
 * System is running.
+* At least one application exists.
 
 **MSS**
-
-1. Student requests to view the application list.
-2. System retrieves all stored applications.
-3. System displays all applications in a structured list.
+1. Student sets/updates a deadline for an application.
+2. System validates date/time format and calendar validity.
+3. System saves the updated application.
+4. Student runs `reminder`.
+5. System sorts applications by deadline and enables urgency highlighting.
+6. System displays updated ordering and visual urgency cues.
 
    Use case ends.
 
 **Extensions**
+* 2a. Date/time format or value is invalid.
+    * 2a1. System shows format/validation error.
+    * 2a2. Student enters a valid deadline.
 
-* 2a. There are no applications.
-    * 2a1. System informs the student.
-    * Use case ends.
+      Use case resumes at step 2.
 
-* 3a. Student requests sorting by deadline.
-    *  3a1. System sorts applications by deadline.
-    * 3a2. System displays the sorted list.
-    * Use case ends.
-
-* 3b. Student requests filtering by status.
-    * 3b1. System filters applications.
-    * 3b2. System displays filtered results.
+* 1a. Index does not exist in current displayed list.
+    * 1a1. System shows index error.
 
       Use case ends.
 
-### **UC04: Delete an application**
+### **UC04 – Undo/redo after state-changing commands**
+
+**Precondition**
+* System is running.
+* At least one state-changing command has been executed.
+
+**MSS**
+1. Student executes a state-changing command (e.g., add/edit/delete/deadline/status/sort/reminder).
+2. Student executes `undo`.
+3. System restores the previous state.
+4. Student executes `redo`.
+5. System reapplies the undone state.
+
+   Use case ends.
+
+**Extensions**
+* 2a. No undoable state exists.
+    * 2a1. System shows an error.
+
+      Use case ends.
+
+* 4a. No redoable state exists.
+    * 4a1. System shows an error.
+
+      Use case ends.
+
+### **UC05: Delete an application**
 
 **Precondition**
 
 * System is running
-* Student is authorized.
 * At least one application exists in the system
 
 **MSS**
@@ -503,7 +559,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  Student requests to list applications
 2.  Hired! shows a list of applications
 3.  Student requests to delete a specific application in the list
-4.  Hired! deletes the person
+4.  Hired! deletes the application
 
     Use case ends.
 
@@ -520,7 +576,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 2.
 
-*{More to be added}*
+### **UC06 – Add/overwrite and remove online assessment event**
+
+**Precondition**
+* System is running.
+* At least one application exists.
+
+**MSS**
+1. Student runs `assessment INDEX el/... et/... ap/... al/...`.
+2. System validates all required fields.
+3. System saves assessment details on the target application (overwriting existing event if present).
+4. Student runs `removeevent INDEX`.
+5. System removes the event from the target application.
+
+   Use case ends.
+
+**Extensions**
+* 2a. Any required assessment field is invalid/missing.
+    * 2a1. System shows validation error.
+
+      Use case ends.
+
+* 4a. Target application has no event.
+    * 4a1. System shows error and keeps data unchanged.
+
+      Use case ends.
+
+Related interactions with similar flow:
+* `status`, `deadline`, and `removeresume` follow the same index-validate-update-commit pattern as UC02.
+* `openresume` follows index-validate-open-resource flow and is intentionally omitted as a simpler variant.
 
 ### Non-Functional Requirements
 
