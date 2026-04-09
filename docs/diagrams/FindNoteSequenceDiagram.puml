@@ -1,0 +1,52 @@
+@startuml
+!include style.puml
+
+actor User
+participant ":LogicManager" as LogicManager
+participant ":AddressBookParser" as AddressBookParser
+participant ":FindNoteCommandParser" as FindNoteCommandParser
+participant "c:FindNoteCommand" as FindNoteCommand
+participant "p:NoteContainsKeywordsPredicate" as Predicate
+participant "m:Model" as Model
+
+User -> LogicManager : execute("findnote recruiter followup")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("findnote recruiter followup")
+activate AddressBookParser
+
+AddressBookParser -> FindNoteCommandParser : parse(" recruiter followup")
+activate FindNoteCommandParser
+
+create Predicate
+FindNoteCommandParser -> Predicate : NoteContainsKeywordsPredicate(keywords)
+activate Predicate
+Predicate --> FindNoteCommandParser
+deactivate Predicate
+
+create FindNoteCommand
+FindNoteCommandParser -> FindNoteCommand : FindNoteCommand(predicate)
+activate FindNoteCommand
+FindNoteCommand --> FindNoteCommandParser
+deactivate FindNoteCommand
+
+FindNoteCommandParser --> AddressBookParser : c
+deactivate FindNoteCommandParser
+
+AddressBookParser --> LogicManager : c
+deactivate AddressBookParser
+
+LogicManager -> FindNoteCommand : execute(m)
+activate FindNoteCommand
+
+FindNoteCommand -> Model : updateFilteredApplicationList(predicate)
+activate Model
+Model --> FindNoteCommand
+deactivate Model
+
+FindNoteCommand --> LogicManager : CommandResult
+deactivate FindNoteCommand
+
+LogicManager --> User : CommandResult
+deactivate LogicManager
+@enduml

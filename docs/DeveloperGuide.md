@@ -263,6 +263,52 @@ How the `sort` command works:
 1. `SortCommand` updates the sorted application list (`Model#updateSortedApplicationList(...)`).
 1. The updated application book state is committed through `Model#commitAddressBook()`.
 
+## Find Note Feature
+
+#### Implementation
+
+The sequence diagram below illustrates the interactions within the `Logic` component for a `findnote` command.
+
+![Interactions Inside the Logic Component for the `findnote` Command](images/FindNoteSequenceDiagram.png)
+
+The class diagram below shows the parsing-related structure for the `findnote` command.
+
+![FindNote parser class diagram](images/FindNoteParserDiagram.png)
+
+How the `findnote` command works:
+
+1. When the user enters a `findnote` command, `LogicManager` passes it to `AddressBookParser`.
+1. `AddressBookParser` creates a `FindNoteCommandParser` to parse the command arguments.
+1. `FindNoteCommandParser` trims the input and checks that at least one keyword is provided.
+1. `FindNoteCommandParser` splits the input into individual keywords.
+1. A `NoteContainsKeywordsPredicate` is created using the parsed keywords.
+1. A `FindNoteCommand` object is created using the predicate and executed.
+1. `FindNoteCommand` calls `Model#updateFilteredApplicationList(predicate)`.
+1. The filtered application list is updated to show only applications whose notes contain any of the specified keywords.
+1. A `CommandResult` is returned through `LogicManager`.
+
+#### Design considerations:
+
+**Aspect: How note searching is implemented**
+
+* **Alternative 1 (current choice):** Use `NoteContainsKeywordsPredicate` together with `Model#updateFilteredApplicationList(predicate)`.
+    * Pros: Reuses the existing filtered list mechanism and keeps the implementation simple and consistent with other search-related commands.
+    * Cons: Only updates the filtered view and does not provide phrase-based matching.
+
+* **Alternative 2:** Manually iterate through all applications in `FindNoteCommand` and build a separate result list.
+    * Pros: Allows more direct control over result construction.
+    * Cons: Duplicates logic that is already handled cleanly by the model’s filtered list mechanism.
+
+**Aspect: How keywords are matched**
+
+* **Alternative 1 (current choice):** Split the input by whitespace and perform case-insensitive keyword matching.
+    * Pros: Simple for users and supports flexible multi-keyword searching.
+    * Cons: Does not support exact phrase matching.
+
+* **Alternative 2:** Treat the entire input as one exact phrase.
+    * Pros: Supports phrase-based matching.
+    * Cons: Less flexible for normal keyword-based searching.
+
 
 ## Add Feature
 
