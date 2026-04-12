@@ -485,16 +485,18 @@ Format: `reminder`
 
 These rules apply when the deadline includes a **time** (minute precision).
 
-* **Precondition:** You have run **`reminder` at least once** in this app session (or saved prefs from before). Until then, highlighting stays off and `role`/calendar icons stay at default colours.
+* **Precondition:** You have run **`reminder` at least once** in this app session (or saved prefs from before). Until then, highlighting stays off and `role`/calendar icons stay at default colors.
 * **Example setup:** Suppose your current local time is `2026-04-02 15:48` and you set an application’s deadline to `2026-04-02 15:48` (via `deadline INDEX 2026-04-02 15:48` or `edit INDEX d/2026-04-02 15:48`).
 * **Still inside the same minute:** e.g. clock shows `15:48:00` — the deadline is **not** treated as overdue yet; the `role` stays **red** (within the 3‑day window rule).
 * **After that minute has passed:** e.g. `15:48:01` or any later time — the deadline becomes **overdue** → **orange** `role` (per the rules above).
-* **No background timer:** The UI does **not** auto-flip colours at the exact second. When real time crosses into “overdue”, refresh colours by either:
+* **No background timer:** The UI does **not** auto-flip colors at the exact second. When real time crosses into “overdue”, refresh colors by either:
     * clicking that application’s **card** (the big row for that `INDEX`), **or**
     * running **`reminder`** again.
-* **What this refreshes:** Colours only (to show overdue vs urgent). **List order** still changes only after **`reminder`** or **`sort time`** if you also need re-sorting after an `edit` / `deadline`.
+* **What this refreshes:** Colors only (to show overdue vs urgent). 
 
-#### Undo / redo
+#### Reminder-specific `undo` / `redo` behaviour
+
+This subsection explains how **`reminder`** interacts with **`undo`** and **`redo`** (list order and highlight state). For general command formats and rules, see [Undoing previous commands : `undo`](#undoing-previous-commands--undo) and [Redoing undone commands : `redo`](#redoing-undone-commands--redo) below.
 
 `undo` / `redo` can restore **both** list order and the reminder highlight toggle. Repeated `reminder` with nothing meaningful changing may count as **one** step in history — one `undo` can turn highlighting off in that situation.
 
@@ -520,6 +522,19 @@ These rules apply when the deadline includes a **time** (minute precision).
 | 3 | `reminder` `reminder` `reminder` … | If the sorted order **does not** change, these may create **no** new undo step. |
 | 4 | `undo` | Undoes the **last command that actually wrote to undo history** — often step 2’s `add`, so the new row disappears; **highlighting can stay on** because those `reminder`s did not add a separate step to undo. |
 | 5 | `redo` | Re-applies what step 4 undid (e.g. restores the `add`). |
+
+#### When `reminder` commits (undoable)
+
+A new undo step is saved **only if** at least one of these is true (same as the app logic: first-time highlight **or** order changed):
+
+1. **Highlighting was off** before this `reminder` (you are turning it **on** for the first time).
+2. **The sorted order changes** — after `reminder` sorts by deadline, the list order is **different** from **immediately before** this command.
+
+Otherwise (highlighting **already on** **and** order **unchanged**), this `reminder` does **not** add another undo step.
+
+**Color** changes alone (e.g. red ↔ orange ↔ white as real time passes) do **not** count — they are recomputed in the UI and do **not** add an undo step by themselves.
+
+*(Overall, undo remembers only about the **last 10** steps.)*
 
 ### Sorting applications : `sort`
 
@@ -576,8 +591,10 @@ Reverses the most recent `undo` command.
 Format: `redo`
 
 * You must perform at least one `undo` command before you can use `redo`.
-* If you attempt to redo when no undoable state exists, an error message "No undoable state to redo. Please perform an undo first." will be shown.
-* If you execute a data-modifying command (e.g.,`add`) after an undo, the `redo` **history** is cleared.
+* **`redo` only works while no new data has been saved after that `undo`.** Any command that **modifies stored application data** and writes to undo history (e.g. `edit`, `add`, `delete`, `reminder` when it commits, `sort`, …) run **after** an `undo` will **clear** the redo branch — then `redo` fails until you `undo` again. This is **by design** (same as moving forward on a branch, then making a new edit).
+* Commands that **only** change the displayed list or view (e.g. `list`, `find`, `findnote`) do **not** clear redo; they may appear between `undo` and `redo`.
+* If you attempt to redo when no redoable state exists, an error message "No undoable state to redo. Please perform an undo first." will be shown.
+* **Concrete sequence (expected failure):** `edit 1 t/tag` → `undo` → `edit 1 t/tagag` → `redo` — the last `redo` **does not** re-apply the first edit; the second `edit` replaced the redo opportunity.
 
 Examples:
 * clear followed by `undo` (restores data), then `redo` (clears data again).
@@ -796,7 +813,7 @@ Action | Format, Examples
 **Reminder** | `reminder` <br> Re-sorts by deadline (nearest first) and highlights the `role` color based on current local time: red within 3 days (incl. today), orange if overdue, default is white.
 **Sort** | `sort CRITERION` <br> CRITERION: `time` or `alphabet` <br> e.g. `sort time`, `sort alphabet`
 **Undo** | `undo` <br> Reverts the most recent data-modifying command (up to 10 steps).
-**Redo** | `redo` <br> Reapplies the most recently undone command.
+**Redo** | `redo` <br> Reapplies the most recently undone command. Invalid if any data-modifying command ran after that `undo` (e.g. `edit` → `undo` → `edit` → `redo` fails).
 **Resume** | `resume INDEX rp/RESUME_PATH` <br> Attaches a resume to a specific application.
 **Open Resume** | `openresume INDEX` <br> Opens a resume of a specific application.
 **Remove Resume** | `removeresume INDEX` <br> Removes a resume of a specific application.
