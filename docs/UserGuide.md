@@ -112,6 +112,9 @@ After launching Hired!, you will mainly interact with these parts of the app:
 ### Command box
 This is where you type commands such as `add`, `find`, `deadline`, or `status`.
 
+* A **horizontal scrollbar** is **always shown** under the command box in the current UI — it is **not** only shown when your command is longer than the visible width. When the line is short or empty, the bar may look idle; that is normal.
+* **Long commands** (e.g. a full `add` line or a long resume path): use the scrollbar (or trackpad / mouse wheel with horizontal gesture where supported) to **scroll horizontally** and see the rest of the line.
+
 ### Result display
 After each command, Hired! shows a success or error message to tell you what happened.
 
