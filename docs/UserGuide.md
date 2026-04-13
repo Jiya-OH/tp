@@ -136,7 +136,7 @@ Each card has an index based on the **currently displayed list**.
 Index-based commands such as `edit`, `delete`, `status`, `deadline`, `resume`, and `removeevent` always use the displayed indexes, not a permanent index.
 
 ### Event button
-If an application has an online assessment attached, a **View Event** button will appear on its card. Clicking it opens a window showing the full assessment details.
+If an application has an attached event (such as an online assessment or interview), a **View Event** button will appear on its card. Clicking it opens a window showing the full event details.
 
 ### Reminder highlighting
 After you run `reminder` at least once, Hired! can highlight application roles based on deadline urgency:
